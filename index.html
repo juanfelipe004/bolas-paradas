@@ -1,0 +1,2061 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" href="/bahia.png" type="png">
+<link rel="apple-touch-icon" href="/bahia.png">
+<title>Marcador de Bolas Paradas</title>
+<style>
+  
+/* ================================
+   FONTE / TEMA BAHIA
+================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --white: #ffffff;
+  --bg: #f7f9fc;
+  --panel: #ffffff;
+  --border: #d8dee6;
+  --border-dark: #c4ccd7;
+  --text: #1d1e22;
+  --text-secondary: #596273;
+
+  --primary: #0033AA;
+  --primary-dark: #00247A;
+  --primary-soft: #E6ECF9;
+
+  --warn: #D61B1B;
+  --success: #16A34A;
+
+  --hover: #f1f5fb;
+  --focus: #EBF2FF;
+
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+}
+
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  margin: 0;
+  padding: var(--space-12);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+}
+
+/* ================================
+   BRAND BAR CENTRALIZADO
+================================ */
+#brandBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: var(--space-16) 0 var(--space-8) 0;
+}
+
+#brandLogo {
+  width: 60px;
+  height: 60px;
+  background-image: url('bahia.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#brandInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+#brandTitle {
+  font-weight: 600;
+  font-size: 18px;
+  padding-top: 10px;
+}
+
+#brandSub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ================================
+   HEADER PRINCIPAL
+================================ */
+h2 {
+  text-align: center;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+h2 + div {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: var(--space-12);
+}
+
+/* ================================
+   TOOLBAR
+================================ */
+.toolbar {
+  display: flex;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-16);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: var(--space-12);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* Botões / Inputs / Selects */
+button, select, input[type="text"], input[type="number"] {
+  padding: var(--space-8) var(--space-12);
+  border-radius: 6px;
+  border: 1px solid var(--border-dark);
+  font-size: 14px;
+  background: var(--white);
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+button {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+  font-weight: 500;
+}
+
+button:hover {
+  background: var(--primary-dark);
+}
+
+button:active {
+  opacity: .85;
+}
+
+select:hover, input:hover {
+  background: var(--hover);
+}
+
+select:focus, input:focus, button:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ================================
+   MAPA
+================================ */
+#mapColumn {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: var(--space-12);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* ================================
+   PANEL GENÉRICO
+================================ */
+.panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: var(--space-12);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* ================================
+   PONTOS MARCADOS (LISTA)
+================================ */
+.point-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-12) 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 14px;
+}
+
+#pointsList {
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: var(--space-4);
+}
+
+/* ================================
+   STATS GRID (CORRIGIDA)
+================================ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-12);
+}
+
+@media (max-width: 1440px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .stats-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+
+.stats-block {
+  background: var(--white);
+  padding: var(--space-12);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  white-space: pre-line;
+  line-height: 1.4;
+}
+
+/* ================================
+   MODAL CORRIGIDO
+================================ */
+.overlay {
+  position: fixed !important;
+  inset: 0;
+  background: rgba(0,0,0,0.45) !important;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+.modal {
+  background: var(--white);
+  width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 10px;
+  display: block;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+}
+
+.modal .header {
+  padding: var(--space-12);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  flex: 1;
+  padding: var(--space-8);
+  text-align: center;
+  cursor: pointer;
+  background: #f0f2f6;
+  font-weight: 500;
+  border-right: 1px solid var(--border);
+  user-select: none;
+}
+
+.tab.active {
+  background: var(--white);
+  border-bottom: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+.tab-content {
+  display: none;
+  padding: var(--space-12);
+  font-size: 14px;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-12);
+  gap: var(--space-8);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-8);
+  padding: var(--space-12);
+  border-top: 1px solid var(--border);
+}
+
+/* ================================
+   RESPONSIVO
+================================ */
+@media (max-width: 1080px) {
+  #layoutRow { flex-direction: column; }
+  #rightColumn { flex-direction: column; }
+}
+
+@media (max-width: 720px) {
+  .toolbar { padding: var(--space-8); }
+}
+/* ================================
+   CHECKBOX DE ESTATÍSTICA (RESTORED)
+================================ */
+.stat-checkbox {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--primary);
+  border-radius: 4px;
+  display: inline-block;
+  margin-left: 6px;
+  cursor: pointer;
+  transition: all .15s ease-in-out;
+  vertical-align: middle;
+}
+
+.stat-checkbox.active {
+  background: var(--primary);
+}
+
+.stats-block div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 4px;
+}
+
+.stats-block input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.point-row {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.point-row .main-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.point-row .coords {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: 24px;
+  margin-top: 2px;
+}
+
+/* ================================
+   LISTAGEM (FORMATO APROVADO)
+================================ */
+.point-row {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 14px;
+}
+
+.point-row .main-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.point-row .main-line span {
+  display: inline-block;
+  font-weight: 400;
+}
+
+.point-row .coords {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: 26px; /* indent */
+}
+
+.point-row .icons {
+  display: flex;
+  gap: 4px;
+  font-size: 15px;
+}
+
+/* Botão Editar dentro da lista */
+.point-row .row-actions {
+  margin-left: auto;
+}
+
+.point-row button {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+/* Hover de linha */
+.point-row:hover {
+  background: var(--hover);
+  transition: background .15s;
+}
+.point-row {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.point-row .main-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.point-row .main-line b {
+  font-weight: 600;
+}
+
+.point-row .icons {
+  display: flex;
+  gap: 4px;
+  font-size: 15px;
+}
+
+.point-row .row-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.point-row .coords {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: 22px;
+  margin-top: 2px;
+}
+
+.point-row:hover {
+  background: var(--hover);
+  transition: background .15s;
+}
+.stat-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.stat-text {
+  display: inline-block;
+  line-height: 18px;
+}
+
+.stat-check {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+.panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+
+</style>
+</head>
+<body>
+
+<div id="brandBar" style="margin-bottom: 10px;">
+  <div id="brandLogo"></div>
+  <div id="brandInfo">
+    <div id="brandTitle">Esporte Clube Bahia SAF</div>
+    <div id="brandSub">Categoria de base • Temporada 2026</div>
+  </div>
+</div>
+
+
+
+<div class="toolbar">
+  <button id="btnClear">Limpar pontos</button>
+  <button id="btnUndo">Desfazer</button>
+  <button id="btnExportCSV">Exportar CSV</button>
+  <button id="btnExportPNG">Exportar PNG</button>
+  <label for="importCSV" style="padding:10px 10px; background:#0077cc; color:white; cursor:pointer; border-radius:4px; font-size:13px;">
+    CSV IMPORT
+  </label>
+  <input type="file" id="importCSV" accept=".csv" multiple style="display:none;" />
+<label style="margin-left:8px; margin-top: 9px;">Lado:</label>
+<select id="filterLado">
+  <option value="all">Todos</option>
+  <option value="direito">Direito</option>
+  <option value="esquerdo">Esquerdo</option>
+  <option value="central">Central</option>
+</select>
+<button id="btnClearStatsFilters">Limpar filtros</button>
+
+
+
+  <div style="margin-left:12px;">
+    <button id="btnHeatmapToggle">Heatmap: OFF</button>
+    <label style="margin-left:8px;">Mostrar: </label>
+    <select id="filterShow">
+      <option value="both">Ambos</option>
+      <option value="ofensivo">Apenas ofensivos</option>
+      <option value="defensivo">Apenas defensivos</option>
+    </select>
+
+    <!-- FILTRO NOVO BP -->
+    <label style="margin-left:8px;">BP:</label>
+    <select id="filterBP">
+      <option value="all">Todos</option>
+      <option value="escanteio">Escanteio</option>
+      <option value="faltaIndireta">Falta indireta</option>
+    </select>
+  </div>
+</div>
+
+<div style="display:flex; gap:16px; align-items:flex-start;">
+
+  <!-- MAPA -->
+  <div id="mapContainer" style="flex:1; display:flex; justify-content:center;">
+    
+  </div>
+
+  <div id="layoutRow" style="
+  display:flex;
+  align-items:flex-start;
+  width:100%;
+">
+
+  <!-- MAPA (GRUDADO ESQUERDA) -->
+  <div id="mapColumn" style="flex:0 0 auto; margin-right:15px;">
+    <canvas id="canvas" width="1200" height="600"></canvas>
+  </div>
+
+  <!-- AREA DIREITA (FLEXIBLE) -->
+  <div id="rightColumn" style="
+    display:flex;
+    flex-direction:row;
+    flex:1;
+    gap:15px;
+  ">
+
+ <!-- LEGENDA (COLADA) -->
+    <div style="width:260px;">
+      <h4>Legenda</h4>
+      <div class="panel">
+         <div><span class="swatch" style="background:#0033aa"></span> Azul escuro = viajada</div>
+  <div><span class="swatch" style="background:#cc0000"></span> Vermelho = rápida</div>
+  <div><span class="swatch" style="background:#ffcc00"></span> Amarelo = curta</div>
+  <div>⭐ Gol</div>
+  <div>● Sem gol</div>
+  <div>⚠️ Chance clara</div>
+  <div style="display:flex; align-items:center; gap:6px;">
+      <div style="width:14px;height:14px;border:2px solid #000;border-radius:50%;"></div>
+      Contorno preto = finalizou
+  </div>
+  <div>Letras D/E/C indicam lado da cobrança</div>
+      </div>
+    </div>
+    <!-- FINALIZAÇÃO (COLADA) -->
+<div style="width:260px;">
+  <h4>Finalização no gol</h4>
+ <div class="panel">
+  <canvas id="goalViewCanvas" width="240" height="140"></canvas>
+</div>
+</div>
+
+    <!-- LISTA PONTOS (CIMA) -->
+    <div style="flex:1; max-width:calc(100% - 260px);margin-top: 20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;"
+           onclick="togglePointsList()">
+        <h4 style="margin:0;">Pontos Marcados</h4>
+        <span id="pointsToggle" style="font-size:18px;">▼</span>
+      </div>
+
+      <div id="pointsPanel" class="panel" style="max-height:450px; overflow:auto; margin-top:6px;">
+        <div id="pointsList"></div>
+      </div>
+    </div>
+
+   
+
+  </div>
+</div>
+
+
+</div>
+
+<!-- ESTATÍSTICAS EMBAIXO -->
+<div style="margin-top:2px;">
+  <div id="statsPanel" class="panel muted">Nenhum dado</div>
+</div>
+
+
+<!-- MODAL -->
+<div id="overlay" class="overlay">
+  <div class="modal">
+    <div class="header">Editar / Criar ponto</div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="tab-geral">Geral</div>
+      <div class="tab" data-tab="tab-final">Finalização</div>
+      <div class="tab" data-tab="tab-resultado">Resultado</div>
+      <div class="tab" data-tab="tab-avanc">Avançado</div>
+    </div>
+
+    <div id="tab-geral" class="tab-content active">
+
+      <!-- NOVO CAMPO -->
+      <div class="row"><label>Bola parada:</label>
+        <select id="tipoBP">
+          <option value="escanteio">Escanteio</option>
+          <option value="faltaIndireta">Falta indireta</option>
+        </select>
+      </div>
+      <!-- FIM NOVO CAMPO -->
+
+      <div class="row"><label>Tipo:</label>
+        <select id="tipoExec"><option value="viajada">Viajada</option><option value="rapida">Rápida</option><option value="curta">Curta</option></select>
+      </div>
+      <div class="row"><label>Lado:</label>
+        <select id="ladoExec"><option value="direito">Direito</option><option value="esquerdo">Esquerdo</option><option value="central">Central</option></select>
+      </div>
+      <div class="row"><label>Abertura:</label>
+        <select id="abertura"><option value="aberta">Aberta</option><option value="fechada">Fechada</option></select>
+      </div>
+      <div class="row"><label>1º contato:</label>
+        <select id="primeiroContato"><option value="nosso">Nosso</option><option value="adversario">Adversário</option><option value="goleiro">Goleiro adversário</option></select>
+      </div>
+      <div class="row"><label>2ª bola?</label>
+        <select id="segundaBola">
+  <option value="nao">Não</option>
+  <option value="nossa">nossa</option>
+  <option value="adversario">adversário</option>
+</select>
+
+      </div>
+      <div class="row"><label>Quem cobrou:</label>
+        <input id="quemCobrou" style="flex:1" />
+      </div>
+      <div class="row"><label>Situação:</label>
+        <select id="situacao"><option value="ofensiva">Ofensiva</option><option value="defensiva">Defensiva</option></select>
+      </div>
+      <div class="row"><label><input id="cobFora" type="checkbox" /> Cobrança para fora do campo</label></div>
+      <div class="row">
+        <label><input id="teveGol" type="checkbox" /> Teve gol</label>
+        <label><input id="finalizou" type="checkbox" /> Finalizou</label>
+        <label><input id="teveFalha" type="checkbox" /> Falha</label>
+      </div>
+    </div>
+
+    <div id="tab-final" class="tab-content">
+      <div class="row"><label>Finalização de:</label>
+        <select id="finalizacaoTipo"><option value="">—</option><option value="pe">Pé</option><option value="cabeca">Cabeça</option></select>
+      </div>
+      <div class="row"><label>Qualidade:</label>
+        <select id="qualidadeChance"><option value="">—</option><option value="gol">Gol</option><option value="clara">Chance clara</option><option value="boa">Boa</option><option value="ruim">Ruim</option></select>
+      </div>
+      <div class="row"><label>Altura:</label>
+        <select id="altura"><option value="">—</option><option value="rasteira">Rasteira</option><option value="media">Média</option><option value="alta">Alta</option></select>
+      </div>
+      <div class="row"><label><input id="finalForaArea" type="checkbox" /> Finalização fora da área</label></div>
+    </div>
+
+    <div id="tab-resultado" class="tab-content">
+      <div class="row"><label>Resultado:</label>
+        <select id="resultadoJogada"><option value="">—</option><option value="gol">Gol</option><option value="contraAtaque">Contra-ataque</option><option value="fora">Finalização para fora</option><option value="noGol">Finalização no gol</option><option value="bloqueada">Bloqueada</option><option value="corte">Corte</option><option value="nada">Nada</option></select>
+      </div>
+      <div id="goalEditWrapper" style="margin-top:14px; display:none;">
+  <label><b>Local da finalização</b></label>
+  <canvas id="goalEditCanvas" width="240" height="160"
+          style="margin-top:6px; border:1px solid #ccc; border-radius:6px;">
+  </canvas>
+</div>
+
+
+    </div>
+
+    <div id="tab-avanc" class="tab-content">
+      <div class="row"><label>Falha?</label>
+        <select id="falhaSelect"><option value="">—</option><option value="sim">Sim</option><option value="nao">Não</option></select>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="deletePoint" class="btn-small" style="margin-right:auto; color:#900;">Excluir</button>
+      <button id="cancelModal" class="btn-small">Cancelar</button>
+      <button id="confirmModal" class="btn-small">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ======== CORE STATE ======== */
+const COLORS={viajada:"#0033aa",rapida:"#cc0000",curta:"#ffcc00"};
+const CLARA_COLORS = {
+  viajada: "#0033aa",
+  rapida: "#e74c3c",    
+  curta: "#f1c40f"      
+};
+
+
+
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
+let img=new Image(), imgLoaded=false;
+let points=[];
+let pendingClick=null;
+let editingIndex=null;
+let heatmapOn=false;
+let filterShow='both';
+let filterBP='all'; // NOVO
+let filterLado='all';
+
+
+// === FILTROS INTERNOS (estatísticas) ===
+// lógica: (AND entre grupos) e (OR dentro do grupo)
+let statFilters = {};
+
+function ensureGroup(group){
+  if(!statFilters[group]) statFilters[group] = new Set();
+}
+
+function passesStatFilters(p){
+  for(const group in statFilters){
+    const set = statFilters[group];
+    if(set.size === 0) continue;
+
+    const value = p[group];
+    if(!set.has(String(value))) return false;
+  }
+  return true;
+}
+
+
+/* ======== HEATMAP REGIONS ======== */
+const HEAT_REGIONS=[
+  {name:"primeiro",x1:253,x2:361,y1:40,y2:150},
+  {name:"zona",x1:362,x2:465,y1:40,y2:150},
+  {name:"segundo",x1:466,x2:588,y1:40,y2:150}
+];
+
+/* ======== ELEMENTS ======== */
+const filterSelect=document.getElementById('filterShow');
+const filterBPSelect=document.getElementById('filterBP'); // NOVO
+const btnHeatmapToggle=document.getElementById('btnHeatmapToggle');
+const btnClear=document.getElementById('btnClear');
+const btnUndo=document.getElementById('btnUndo');
+const btnExportCSV=document.getElementById('btnExportCSV');
+const btnExportPNG=document.getElementById('btnExportPNG');
+const pointsList=document.getElementById('pointsList');
+const statsPanel=document.getElementById('statsPanel');
+const overlay=document.getElementById('overlay');
+const filterLadoSelect=document.getElementById('filterLado');
+
+
+/* MODAL FIELDS */
+const tipoBP=document.getElementById('tipoBP'); // NOVO
+const tipoExec=document.getElementById('tipoExec');
+const ladoExec=document.getElementById('ladoExec');
+const abertura=document.getElementById('abertura');
+const primeiroContato=document.getElementById('primeiroContato');
+const segundaBola=document.getElementById('segundaBola');
+const quemCobrou=document.getElementById('quemCobrou');
+const situacao=document.getElementById('situacao');
+const cobFora=document.getElementById('cobFora');
+const teveGol=document.getElementById('teveGol');
+const finalizou=document.getElementById('finalizou');
+const teveFalha=document.getElementById('teveFalha');
+const finalizacaoTipo=document.getElementById('finalizacaoTipo');
+const qualidadeChance=document.getElementById('qualidadeChance');
+const altura=document.getElementById('altura');
+const finalForaArea=document.getElementById('finalForaArea');
+const resultadoJogada=document.getElementById('resultadoJogada');
+const falhaSelect=document.getElementById('falhaSelect');
+const confirmModal=document.getElementById('confirmModal');
+const cancelModal=document.getElementById('cancelModal');
+const deletePoint=document.getElementById('deletePoint');
+
+/* TABS */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+  }
+});
+
+/* LOAD DEFAULT IMAGE */
+img.onload=()=>{
+  canvas.width=img.naturalWidth;
+  canvas.height=img.naturalHeight;
+  imgLoaded=true;
+  render();
+};
+img.src="picture1.png";
+
+/* RESET */
+function resetModal(){
+  tipoBP.value='escanteio'; // NOVO
+  tipoExec.value='viajada';
+  ladoExec.value='direito';
+  abertura.value='aberta';
+  primeiroContato.value='nosso';
+  segundaBola.value='nao';
+  quemCobrou.value='';
+  situacao.value='ofensiva';
+  cobFora.checked=false;
+  teveGol.checked=false;
+  finalizou.checked=false;
+  teveFalha.checked=false;
+  finalizacaoTipo.value='';
+  qualidadeChance.value='';
+  altura.value='';
+  finalForaArea.checked=false;
+  resultadoJogada.value='';
+  falhaSelect.value='';
+}
+
+/* CLICK */
+canvas.onclick = (ev)=>{
+  if(!imgLoaded) return;
+
+  const r = canvas.getBoundingClientRect();
+  const x = ev.clientX - r.left;
+  const y = ev.clientY - r.top;
+
+  const visible = getVisiblePoints(); // 👈 só os visíveis
+
+  let foundIndex = null;
+
+  for(const p of visible){
+    if(Math.hypot(p.x - x, p.y - y) <= 12){
+      foundIndex = points.indexOf(p); // índice real
+      break;
+    }
+  }
+
+  if(foundIndex !== null){
+    openModalEdit(foundIndex);
+    return;
+  }
+
+  editingIndex = null;
+  pendingClick = { x, y };
+  openModalCreate();
+};
+
+function openModalCreate(){
+  resetModal();
+  deletePoint.style.display='none';
+  overlay.style.display='flex';
+  resetTabsState()
+  tempGoalPoint = null;
+  renderGoalEdit();
+  goalEditWrapper.style.display = 'none';
+
+
+}
+function openModalEdit(i){
+  editingIndex=i;
+  const p=points[i];
+
+  tipoBP.value=p.tipoBP||'escanteio'; // NOVO
+  tipoExec.value=p.tipo;
+  ladoExec.value=p.lado;
+  abertura.value=p.abertura;
+  primeiroContato.value=p.primeiroContato;
+  segundaBola.value=p.segundaBola;
+  quemCobrou.value=p.quemCobrou||'';
+  situacao.value=p.situacao;
+  cobFora.checked=p.cobFora;
+  teveGol.checked=p.teveGol;
+  finalizou.checked=p.finalizou;
+  teveFalha.checked=p.teveFalha;
+  finalizacaoTipo.value=p.finalizacaoTipo||'';
+  qualidadeChance.value=p.qualidadeChance||'';
+  altura.value=p.altura||'';
+  finalForaArea.checked=p.finalForaArea;
+  resultadoJogada.value=p.resultadoJogada||'';
+  falhaSelect.value=p.falha||'';
+  tempGoalPoint = points[i].goalPoint || null;  
+  goalEditWrapper.style.display =
+  (points[i].resultadoJogada === 'gol' || points[i].resultadoJogada === 'noGol')
+    ? 'block'
+    : 'none';
+
+  deletePoint.style.display='inline-block';
+  overlay.style.display='flex';
+  resetTabsState()
+  const ativo = p.resultadoJogada === 'gol' || p.resultadoJogada === 'noGol';
+goalEditWrapper.style.display = ativo ? 'block' : 'none';
+renderGoalEdit();
+
+
+}
+
+cancelModal.onclick=()=>{overlay.style.display='none';pendingClick=null;editingIndex=null;tempGoalPoint = null;};
+deletePoint.onclick=()=>{ if(editingIndex!==null){points.splice(editingIndex,1);render();} overlay.style.display='none'; };
+
+confirmModal.onclick = ()=>{
+  const data = {
+    x: pendingClick ? pendingClick.x : points[editingIndex].x,
+    y: pendingClick ? pendingClick.y : points[editingIndex].y,
+
+    tipoBP: tipoBP.value,
+
+    tipo: tipoExec.value,
+    cor: COLORS[tipoExec.value],
+    lado: ladoExec.value,
+    abertura: abertura.value,
+    primeiroContato: primeiroContato.value,
+    segundaBola: segundaBola.value,
+    quemCobrou: quemCobrou.value,
+    situacao: situacao.value,
+    cobFora: cobFora.checked,
+    teveGol: teveGol.checked,
+    finalizou: finalizou.checked,
+    teveFalha: teveFalha.checked,
+    finalizacaoTipo: finalizacaoTipo.value,
+    qualidadeChance: qualidadeChance.value,
+    altura: altura.value,
+    finalForaArea: finalForaArea.checked,
+    resultadoJogada: resultadoJogada.value,
+    falha: falhaSelect.value,
+
+    // 🔴 COORDENADA DO GOL
+    goalPoint: tempGoalPoint
+  };
+
+  // salva ponto normal
+if (editingIndex === null) {
+  points.push(data);
+} else {
+  Object.assign(points[editingIndex], data);
+}
+
+
+overlay.style.display = 'none';
+
+
+render();
+
+
+console.log('GOAL:', tempGoalPoint, resultadoJogada.value);
+
+};
+
+function drawStatsChart(){
+  // placeholder para evitar erro
+}
+
+function getVisiblePoints(){
+  return points.filter(p=>{
+    if(filterShow === 'ofensivo' && p.situacao !== 'ofensiva') return false;
+    if(filterShow === 'defensivo' && p.situacao !== 'defensiva') return false;
+    if(filterBP !== 'all' && p.tipoBP !== filterBP) return false;
+    if(filterLado !== 'all' && p.lado !== filterLado) return false;
+    if(!passesStatFilters(p)) return false;
+    return true;
+  });
+}
+
+
+
+function render(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(imgLoaded) ctx.drawImage(img,0,0);
+
+  if(heatmapOn) drawHeatmap();  // 1 - heatmap
+  drawPoints();                 // 2 - pontos
+  if(heatmapOn) drawHeatmapText(); // 3 - texto sempre por cima
+
+  updateUI();
+  renderGoalView();
+
+}
+
+function resetTabsState(){
+  document.querySelectorAll('.tab').forEach(tab=>{
+    const id = tab.dataset.tab;
+    tab.classList.remove('active');
+
+    // Geral e Resultado sempre liberadas
+    if(id === 'tab-geral' || id === 'tab-resultado'){
+      tab.style.pointerEvents = 'auto';
+      tab.style.opacity = '1';
+    } else {
+      tab.style.pointerEvents = 'none';
+      tab.style.opacity = '0.4';
+    }
+  });
+
+  document.querySelectorAll('.tab-content').forEach(c=>{
+    c.classList.remove('active');
+  });
+
+  // Geral sempre começa ativo
+  document.querySelector('.tab[data-tab="tab-geral"]').classList.add('active');
+  document.getElementById('tab-geral').classList.add('active');
+}
+
+
+
+function enableTab(tabId){
+  const tab = document.querySelector(`.tab[data-tab="${tabId}"]`);
+  const content = document.getElementById(tabId);
+  if(!tab || !content) return;
+
+  // libera clique
+  tab.style.pointerEvents = 'auto';
+  tab.style.opacity = '1';
+
+  // ativa visualmente
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+
+  tab.classList.add('active');
+  content.classList.add('active');
+}
+
+
+function drawHeatmapText(){
+  const vis = points.filter(p=>{
+    if(filterShow==='ofensivo' && p.situacao!=='ofensiva') return false;
+    if(filterShow==='defensivo' && p.situacao!=='defensiva') return false;
+    if(filterBP!=='all' && p.tipoBP!==filterBP) return false;
+    if(filterLado!=='all' && p.lado!==filterLado) return false;
+    if(!passesStatFilters(p)) return false;
+    return true;
+  });
+
+  const counts = HEAT_REGIONS.map(r=>({
+    r,
+    count: vis.filter(p=>p.x>=r.x1 && p.x<=r.x2 && p.y>=r.y1 && p.y<=r.y2).length
+  }));
+
+  counts.forEach(({r,count})=>{
+    if(count === 0) return;
+    ctx.fillStyle='white';
+    ctx.font='bold 22px Arial';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(count, r.x1+(r.x2-r.x1)/2, r.y1+(r.y2-r.y1)/2);
+  });
+}
+
+/* HEATMAP — corrigido */
+function drawHeatmap(){
+  // pega só pontos visíveis (já filtrados pelos filtros internos)
+  const vis = points.filter(p=>{
+    if(filterShow==='ofensivo' && p.situacao!=='ofensiva') return false;
+    if(filterShow==='defensivo' && p.situacao!=='defensiva') return false;
+    if(filterBP!=='all' && p.tipoBP!==filterBP) return false;
+    if(filterLado!=='all' && p.lado!==filterLado) return false;
+    if(!passesStatFilters(p)) return false;
+    return true;
+  });
+
+  const counts = HEAT_REGIONS.map(r=>({
+    r,
+    count: vis.filter(p=>p.x>=r.x1 && p.x<=r.x2 && p.y>=r.y1 && p.y<=r.y2).length
+  }));
+
+  const max = Math.max(...counts.map(c=>c.count));
+
+  counts.forEach(({r,count})=>{
+    if(count === 0) return;
+    const a = (count/max)*0.8 + 0.1; // intensidade
+    ctx.fillStyle=`rgba(0,80,200,${a})`;
+    ctx.fillRect(r.x1,r.y1,r.x2-r.x1,r.y2-r.y1);
+  });
+}
+
+/* DRAW */
+function drawPoints(){
+  for(const p of points){
+
+  // filtro toolbar (já existe)
+  if(filterShow==='ofensivo'&&p.situacao!=='ofensiva')continue;
+  if(filterShow==='defensivo'&&p.situacao!=='defensiva')continue;
+  if(filterBP!=='all' && p.tipoBP!==filterBP) continue;
+  if(filterLado!=='all' && p.lado!==filterLado) continue;
+
+  // === NOVO: filtro estatístico interno ===
+  if(!passesStatFilters(p)) continue;
+
+
+
+    ctx.fillStyle=p.cor;
+    ctx.strokeStyle=p.finalizou?'#000':'transparent';
+    ctx.lineWidth=2;
+
+if(p.cobFora){
+  ctx.strokeStyle = "#cc0000";   // vermelho
+  ctx.lineWidth = 6;   
+  ctx.beginPath();
+  ctx.moveTo(p.x-10, p.y-10);
+  ctx.lineTo(p.x+10, p.y+10);
+  ctx.moveTo(p.x+10, p.y-10);
+  ctx.lineTo(p.x-10, p.y+10);
+  ctx.stroke();
+  continue;
+}
+
+
+    if(p.teveGol){
+      drawStar(p.x,p.y,12);
+    } else if (p.qualidadeChance === 'clara') {
+  drawAlertTriangle(p.x, p.y, 12, CLARA_COLORS[p.tipo], p.tipo);
+  continue;
+}
+
+
+ else {
+      drawCircle(p.x,p.y,10);
+    }
+
+    ctx.font='10px Arial';
+    ctx.fillStyle='white';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    const letra = p.lado ? p.lado[0].toUpperCase() : '';
+    if(p.qualidadeChance !== 'clara'){
+  ctx.fillText(letra,p.x,p.y);
+}
+
+  }
+}
+
+function drawCircle(x,y,r){
+  ctx.beginPath();
+  ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.fill();ctx.stroke();
+}
+function drawStar(x,y,r){
+  ctx.beginPath();
+  ctx.moveTo(x,y-r);
+  ctx.lineTo(x+r*.3,y-r*.3);
+  ctx.lineTo(x+r,y);
+  ctx.lineTo(x+r*.3,y+r*.3);
+  ctx.lineTo(x,y+r);
+  ctx.lineTo(x-r*.3,y+r*.3);
+  ctx.lineTo(x-r,y);
+  ctx.lineTo(x-r*.3,y-r*.3);
+  ctx.closePath();
+  ctx.fill();ctx.stroke();
+}
+function drawTriangle(x, y, size, color){
+  const h = size * 1.25; // mais altura útil
+
+  ctx.beginPath();
+  ctx.moveTo(x, y - h/2);       // topo
+  ctx.lineTo(x + size, y + h/2); // base direita
+  ctx.lineTo(x - size, y + h/2); // base esquerda
+  ctx.closePath();
+
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function drawAlertTriangle(x, y, r, bgColor, tipo) {
+  // geometria equilibrada
+  const halfH = r * 0.9;
+  const halfW = r * 1.0;
+
+  ctx.beginPath();
+  ctx.moveTo(x,        y - halfH); // vértice superior
+  ctx.lineTo(x + halfW, y + halfH);
+  ctx.lineTo(x - halfW, y + halfH);
+  ctx.closePath();
+
+  ctx.fillStyle = bgColor;
+  ctx.fill();
+
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // cor do símbolo
+  const exclColor = (tipo === 'viajada') ? "#fff" : "#000";
+  ctx.fillStyle = exclColor;
+
+  // tamanho proporcional
+  const fontSize = r * 1.6;
+  ctx.font = `${fontSize}px Arial`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+
+  // coordenada do topo interno do triângulo
+  const triTopY = y - halfH;
+
+  // deslocamento ideal: 1px + metade da altura do símbolo
+  const textY = triTopY + 0.3 + (fontSize * 0.25);
+
+  ctx.fillText("!", x, textY);
+}
+
+/* UI */
+function updateUI(){
+  updateList();
+  updateStats();
+}
+
+function updateList(){
+  pointsList.innerHTML='';
+  points.forEach((p,i)=>{
+    const div = document.createElement('div');
+    div.className = 'point-row';
+
+    const frase = `#${i+1} ${p.tipoBP || ''} ${p.tipo || ''} ${p.situacao || ''}`.trim();
+    const icons = [];
+    if (p.finalizou) icons.push("🎯");
+    if (p.teveGol) icons.push("⚽");
+
+    div.innerHTML = `
+      <div class="main-line">
+        <span>${frase} ${icons.join(' ')}</span>
+        <div class="row-actions">
+          <button class="btn-small" onclick="openModalEdit(${i})">Editar</button>
+          <button class="btn-small" onclick="points.splice(${i},1);render()">Excluir</button>
+        </div>
+      </div>
+      <div class="coords">x:${p.x.toFixed(0)} y:${p.y.toFixed(0)}</div>
+    `;
+
+    pointsList.append(div);
+  });
+}
+
+function renderStatFilter(group, label, count, internalValue = label){
+  ensureGroup(group);
+  const value = internalValue;
+  const active = statFilters[group].has(String(value));
+  const cls = active ? "stat-checkbox active" : "stat-checkbox";
+
+  return `
+<div class="stat-line">
+  <span class="stat-text">${label}: ${count}</span>
+  <input type="checkbox"
+    class="stat-check"
+    data-group="${group}"
+    data-val="${value}"
+    ${active ? "checked" : ""}
+  >
+</div>`;
+
+
+}
+
+
+function bindStatCheckboxEvents(){
+  statsPanel.querySelectorAll(".stat-check").forEach(el=>{
+    el.onclick = (ev)=>{
+      const group = el.dataset.group;
+      const value = el.dataset.val;
+      ensureGroup(group);
+
+      if(el.checked){
+        statFilters[group].add(String(value));
+      } else {
+        statFilters[group].delete(String(value));
+      }
+
+      render();
+    };
+  });
+}
+
+
+function updateStats(){
+  if(points.length===0){
+    statsPanel.textContent="Nenhum dado";
+    drawStatsChart(0,0);
+    return;
+  }
+
+  // ===== LABELS PARA VISUALIZAÇÃO =====
+  const LABEL = {
+    finalizou:{ true:"Finalizou", false:"Não finalizou" },
+    finalForaArea:{ true:"Fora da área" },
+    teveGol:{ true:"Gol" },
+    cobFora:{ true:"Cobrança fora do campo" },
+    falha:{ sim:"Falha" },
+  };
+
+  const total=points.length;
+  const importCSV = document.getElementById('importCSV');
+
+  const tipoBPCount=countBy(points,'tipoBP');
+  const tipo=countBy(points,'tipo');
+  const lado=countBy(points,'lado');
+  const abertura=countBy(points,'abertura');
+  const situacao=countBy(points,'situacao');
+  const primeiroContato=countBy(points,'primeiroContato');
+  const segundaBola=countBy(points,'segundaBola');
+  const finalizacaoTipo=countBy(points,'finalizacaoTipo');
+  const qualidadeChance=countBy(points,'qualidadeChance');
+  const altura=countBy(points,'altura');
+  const resultadoJogada=countBy(points,'resultadoJogada');
+  const falha=countBy(points,'falha');
+
+  const finalizouSim=points.filter(p=>p.finalizou===true).length;
+  const finalizouNao=points.filter(p=>p.finalizou===false).length;
+  const finalForaArea=points.filter(p=>p.finalForaArea===true).length;
+  const finalDentroArea=points.filter(p=>p.finalizou===true && p.finalForaArea!==true).length;
+
+  const gols=points.filter(p=>p.teveGol===true).length;
+  const claras=points.filter(p=>p.qualidadeChance==='clara').length;
+  const falhasSim=points.filter(p=>p.falha==='sim').length;
+  const segundaNossa=points.filter(p=>p.segundaBola==='nossa').length;
+  const segundaAdv=points.filter(p=>p.segundaBola==='adversario').length;
+  const cobrancaFora=points.filter(p=>p.cobFora===true).length;
+
+  statsPanel.innerHTML=
+`
+<div class="stats-grid">
+
+  <div class="stats-block">
+    <b>Bola parada</b>
+    ${renderStatFilter("tipoBP","escanteio",tipoBPCount.escanteio||0)}
+    ${renderStatFilter("tipoBP","faltaIndireta",tipoBPCount.faltaIndireta||0)}
+  </div>
+
+  <div class="stats-block">
+    <b>Situação</b>
+    ${renderStatFilter("situacao","ofensiva",situacao.ofensiva||0)}
+    ${renderStatFilter("situacao","defensiva",situacao.defensiva||0)}
+  </div>
+
+  <div class="stats-block">
+    <b>Tipo da cobrança</b>
+    ${renderStatFilter("tipo","viajada",tipo.viajada||0)}
+    ${renderStatFilter("tipo","rapida",tipo.rapida||0)}
+    ${renderStatFilter("tipo","curta",tipo.curta||0)}
+  </div>
+
+  <div class="stats-block">
+    <b>Abertura</b>
+    ${renderStatFilter("abertura","aberta",abertura.aberta||0)}
+    ${renderStatFilter("abertura","fechada",abertura.fechada||0)}
+  </div>
+
+  <div class="stats-block">
+    <b>Lado</b>
+    ${renderStatFilter("lado","direito",lado.direito||0)}
+    ${renderStatFilter("lado","esquerdo",lado.esquerdo||0)}
+    ${renderStatFilter("lado","central",lado.central||0)}
+  </div>
+
+  <div class="stats-block">
+    <b>1º Contato</b>
+    ${renderStatFilter("primeiroContato","nosso",primeiroContato.nosso||0)}
+    ${renderStatFilter("primeiroContato","adversario",primeiroContato.adversario||0)}
+    ${renderStatFilter("primeiroContato","goleiro",primeiroContato.goleiro||0)}
+  </div>
+
+  <div class="stats-block">
+    <b>Finalizações</b>
+    ${renderStatFilter("finalizou", LABEL.finalizou.true, finalizouSim, "true")}
+    ${renderStatFilter("finalizou", LABEL.finalizou.false, finalizouNao, "false")}
+    ${renderStatFilter("finalForaArea", LABEL.finalForaArea.true, finalForaArea, "true")}
+    ${renderStatFilter("resultadoJogada","noGol",resultadoJogada.noGol||0)}
+    ${renderStatFilter("resultadoJogada","fora",resultadoJogada.fora||0)}
+  </div>
+
+  <div class="stats-block">
+    <b>Qualidade</b>
+    ${renderStatFilter("qualidadeChance","gol",qualidadeChance.gol||0)}
+    ${renderStatFilter("qualidadeChance","clara",qualidadeChance.clara||0)}
+    ${renderStatFilter("qualidadeChance","boa",qualidadeChance.boa||0)}
+    ${renderStatFilter("qualidadeChance","ruim",qualidadeChance.ruim||0)}
+  </div>
+
+  <div class="stats-block">
+    <b>Altura</b>
+    ${renderStatFilter("altura","rasteira",altura.rasteira||0)}
+    ${renderStatFilter("altura","media",altura.media||0)}
+    ${renderStatFilter("altura","alta",altura.alta||0)}
+  </div>
+
+  <div class="stats-block">
+    <b>Resultado</b>
+    ${renderStatFilter("resultadoJogada","contraAtaque",resultadoJogada.contraAtaque||0)}
+    ${renderStatFilter("resultadoJogada","bloqueada",resultadoJogada.bloqueada||0)}
+    ${renderStatFilter("resultadoJogada","corte",resultadoJogada.corte||0)}
+    ${renderStatFilter("resultadoJogada","nada",resultadoJogada.nada||0)}
+  </div>
+
+  <div class="stats-block">
+    <b>Eventos críticos</b>
+    ${renderStatFilter("teveGol", LABEL.teveGol.true, gols, "true")}
+    ${renderStatFilter("qualidadeChance","clara",claras,"clara")}
+    ${renderStatFilter("falha", LABEL.falha.sim, falhasSim, "sim")}
+    ${renderStatFilter("cobFora", LABEL.cobFora.true, cobrancaFora, "true")}
+  </div>
+
+  <div class="stats-block">
+    <b>2ª bola</b>
+    ${renderStatFilter("segundaBola","nossa",segundaNossa,"nossa")}
+    ${renderStatFilter("segundaBola","adversario",segundaAdv,"adversario")}
+  </div>
+
+</div>
+`;
+
+  bindStatCheckboxEvents();
+  drawStatsChart(finalizouSim,finalizouNao);
+}
+
+function countBy(arr,key){
+  return arr.reduce((acc,o)=>{
+    const v=o[key];
+    acc[v]=(acc[v]||0)+1;
+    return acc;
+  },{});
+}
+
+/* BUTTONS */
+btnClear.onclick = ()=>{
+  if(confirm('Confirmar limpar todos os pontos?')){
+    resetAllState();
+  }
+};
+
+btnUndo.onclick = ()=>{
+  if(points.length === 0) return;
+
+  points.pop();
+
+  if(points.length === 0){
+    resetAllState();
+  } else {
+    render();
+  }
+};
+
+filterSelect.onchange=e=>{filterShow=e.target.value;render();};
+filterBPSelect.onchange=e=>{filterBP=e.target.value;render();}; // NOVO
+filterLadoSelect.onchange=e=>{
+  filterLado=e.target.value;
+  render();
+};
+btnHeatmapToggle.onclick=()=>{
+  heatmapOn=!heatmapOn;
+  btnHeatmapToggle.textContent=heatmapOn?'Heatmap: ON':'Heatmap: OFF';
+  render();
+};
+
+btnExportCSV.onclick = ()=>{
+  let csv = "x,y,tipoBP,tipo,lado,abertura,primeiroContato,segundaBola,quemCobrou,situacao,cobFora,teveGol,finalizou,teveFalha,finalizacaoTipo,qualidadeChance,altura,finalForaArea,resultadoJogada,goalX,goalY,falha\n";
+
+  points.forEach(p=>{
+    csv += [
+      p.x,
+      p.y,
+      p.tipoBP || '',
+      p.tipo || '',
+      p.lado || '',
+      p.abertura || '',
+      p.primeiroContato || '',
+      p.segundaBola || '',
+      p.quemCobrou || '',
+      p.situacao || '',
+      p.cobFora ? "true" : "false",
+      p.teveGol ? "true" : "false",
+      p.finalizou ? "true" : "false",
+      p.teveFalha ? "true" : "false",
+      p.finalizacaoTipo || '',
+      p.qualidadeChance || '',
+      p.altura || '',
+      p.finalForaArea ? "true" : "false",
+      p.resultadoJogada || '',
+      p.goalPoint ? p.goalPoint.x : '',
+      p.goalPoint ? p.goalPoint.y : '',
+      p.falha || ''
+    ].join(",") + "\n";
+  });
+
+  const blob = new Blob([csv], { type:'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'bolas_completo.csv';
+  a.click();
+};
+
+importCSV.addEventListener('change', e=>{
+  const files = Array.from(e.target.files);
+  if(files.length === 0) return;
+
+  files.forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = evt=>{
+      const lines = evt.target.result.trim().split('\n');
+      const header = lines.shift().split(',');
+
+      lines.forEach(line=>{
+        const cols = line.split(',');
+        if(cols.length < header.length) return;
+
+        const data = {};
+        header.forEach((h,i)=> data[h] = cols[i]);
+
+        const goalX = data.goalX ? Number(data.goalX) : null;
+        const goalY = data.goalY ? Number(data.goalY) : null;
+
+        points.push({
+          x: Number(data.x),
+          y: Number(data.y),
+          tipoBP: data.tipoBP || 'escanteio',
+          tipo: data.tipo,
+          cor: COLORS[data.tipo] || '#000',
+          lado: data.lado,
+          abertura: data.abertura,
+          primeiroContato: data.primeiroContato,
+          segundaBola: data.segundaBola,
+          quemCobrou: data.quemCobrou,
+          situacao: data.situacao,
+          cobFora: data.cobFora === "true",
+          teveGol: data.teveGol === "true",
+          finalizou: data.finalizou === "true",
+          teveFalha: data.teveFalha === "true",
+          finalizacaoTipo: data.finalizacaoTipo,
+          qualidadeChance: data.qualidadeChance,
+          altura: data.altura,
+          finalForaArea: data.finalForaArea === "true",
+          resultadoJogada: data.resultadoJogada,
+          falha: data.falha,
+
+          // ✅ COORDENADA DO GOL CORRETA
+          goalPoint: (goalX !== null && goalY !== null)
+            ? { x: goalX, y: goalY }
+            : null
+        });
+      });
+
+      render();
+      importCSV.value = '';
+    };
+
+    reader.readAsText(file);
+  });
+});
+
+btnExportPNG.onclick=()=>{
+
+  const o=document.createElement('canvas');
+  o.width=canvas.width;
+  o.height=canvas.height;
+  const ox=o.getContext('2d');
+
+  // fundo
+  ox.drawImage(img,0,0);
+
+  // === FILTRA PONTOS VISÍVEIS ===
+  const vis = points.filter(p=>{
+    if(filterShow==='ofensivo' && p.situacao!=='ofensiva') return false;
+    if(filterShow==='defensivo' && p.situacao!=='defensiva') return false;
+    if(filterBP!=='all' && p.tipoBP!==filterBP) return false;
+    return true;
+  });
+
+  // === HEATMAP PARA EXPORTAÇÃO ===
+  if(heatmapOn){
+    const hcounts = HEAT_REGIONS.map(r=>({
+      r,
+      count: vis.filter(p=>p.x>=r.x1 && p.x<=r.x2 && p.y>=r.y1 && p.y<=r.y2).length
+    }));
+
+    const hmax = Math.max(...hcounts.map(c=>c.count));
+
+    if(hmax>0){
+      hcounts.forEach(({r,count})=>{
+        const a = (count/hmax)*0.8 + 0.1;
+        ox.fillStyle = `rgba(0,80,200,${a})`;
+        ox.fillRect(r.x1, r.y1, r.x2-r.x1, r.y2-r.y1);
+
+        ox.fillStyle='white';
+        ox.font='bold 22px Arial';
+        ox.textAlign='center';
+        ox.textBaseline='middle';
+        ox.fillText(count, r.x1+(r.x2-r.x1)/2, r.y1+(r.y2-r.y1)/2);
+      });
+    }
+  }
+
+  // === PONTOS VISÍVEIS ===
+  vis.forEach(p=>{
+  ox.lineWidth = 2;
+
+  // === COBRANÇA PARA FORA – PRIORITÁRIO ===
+  if (p.cobFora) {
+    ox.strokeStyle = "#cc0000";
+    ox.lineWidth = 6;
+    ox.beginPath();
+    ox.moveTo(p.x - 10, p.y - 10);
+    ox.lineTo(p.x + 10, p.y + 10);
+    ox.moveTo(p.x + 10, p.y - 10);
+    ox.lineTo(p.x - 10, p.y + 10);
+    ox.stroke();
+    return; // NÃO DESENHA MAIS NADA
+  }
+
+  // === TEVE GOL ===
+  if (p.teveGol) {
+    ox.fillStyle = p.cor;
+    ox.strokeStyle = "#000";
+    ox.beginPath();
+    ox.moveTo(p.x,p.y-12);
+    ox.lineTo(p.x+12*0.3,p.y-12*0.3);
+    ox.lineTo(p.x+12,p.y);
+    ox.lineTo(p.x+12*0.3,p.y+12*0.3);
+    ox.lineTo(p.x,p.y+12);
+    ox.lineTo(p.x-12*0.3,p.y+12*0.3);
+    ox.lineTo(p.x-12,p.y);
+    ox.lineTo(p.x-12*0.3,p.y-12*0.3);
+    ox.closePath();
+    ox.fill(); ox.stroke();
+  }
+
+  // === CHANCE CLARA ===
+  else if (p.qualidadeChance === 'clara') {
+    drawAlertTrianglePNG(ox, p.x, p.y, 12, CLARA_COLORS[p.tipo]);
+  }
+
+  // === CASO NORMAL ===
+  else {
+    ox.fillStyle = p.cor;
+    ox.strokeStyle = p.finalizou ? "#000" : "transparent";
+    ox.beginPath();
+    ox.arc(p.x,p.y,10,0,Math.PI*2);
+    ox.fill(); ox.stroke();
+  }
+
+  // === LETRA D/E/C (menos no triângulo com clara) ===
+  if(p.qualidadeChance !== 'clara'){
+    ox.font='10px Arial';
+    ox.fillStyle='white';
+    ox.textAlign='center';
+    ox.textBaseline='middle';
+    const letra = p.lado ? p.lado[0].toUpperCase() : '';
+    ox.fillText(letra,p.x,p.y);
+  }
+});
+
+  function drawAlertTriangle(x, y, r, bgColor) {
+  const h = r * 1.5; // triângulo mais alto para cortar "pé"
+
+  // Triângulo
+  ctx.beginPath();
+  ctx.moveTo(x, y - h * 0.52);      // topo
+  ctx.lineTo(x + r, y + h * 0.48);  // base direita
+  ctx.lineTo(x - r, y + h * 0.48);  // base esquerda
+  ctx.closePath();
+
+  ctx.fillStyle = bgColor;
+  ctx.fill();
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Cor da exclamação
+  let exclColor = "#000";
+  if (bgColor === CLARA_COLORS.viajada) exclColor = "#fff";
+
+  // Ajuste fino da posição do "!"
+  ctx.fillStyle = exclColor;
+  ctx.font = `${r * 1.45}px Arial`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  // deslocamento leve para cima (remove "pé" visual)
+  ctx.fillText("!", x, y - (h * 0.10));
+}
+
+
+  // === EXPORTA PNG ===
+  o.toBlob(b=>{
+    const url=URL.createObjectURL(b);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='mapa.png';
+    a.click();
+  });
+
+};
+
+function drawAlertTrianglePNG(ox, x, y, r, bgColor) {
+  const h = r * 1.5;
+
+  ox.beginPath();
+  ox.moveTo(x, y - h * 0.52);
+  ox.lineTo(x + r, y + h * 0.48);
+  ox.lineTo(x - r, y + h * 0.48);
+  ox.closePath();
+
+  ox.fillStyle = bgColor;
+  ox.fill();
+  ox.strokeStyle = "#000";
+  ox.lineWidth = 2;
+  ox.stroke();
+
+  let exclColor = "#000";
+  if (bgColor === CLARA_COLORS.viajada) exclColor = "#fff";
+
+  ox.fillStyle = exclColor;
+  ox.font = `${r * 1.45}px Arial`;
+  ox.textAlign = "center";
+  ox.textBaseline = "middle";
+  ox.fillText("!", x, y - (h * 0.10));
+}
+
+
+window.openModalEdit=openModalEdit;
+</script>
+
+
+<script>
+
+
+document.getElementById('btnClearStatsFilters').onclick = ()=>{
+  statFilters = {};
+  render();
+};
+function togglePointsList(){
+  const panel = document.getElementById('pointsPanel');
+  const icon = document.getElementById('pointsToggle');
+
+  if(panel.style.display === 'none'){
+    panel.style.display = 'block';
+    icon.textContent = '▼';
+  } else {
+    panel.style.display = 'none';
+    icon.textContent = '▲';
+  }
+}
+
+const goalViewCanvas = document.getElementById('goalViewCanvas');
+const gvctx = goalViewCanvas.getContext('2d');
+const goalViewImg = new Image();
+
+
+
+goalViewImg.src = 'gol.jpeg';
+
+goalViewImg.onload = ()=> renderGoalView();
+
+function renderGoalView(){
+  if(!goalViewImg.complete) return;
+
+  gvctx.clearRect(0,0,goalViewCanvas.width,goalViewCanvas.height);
+  gvctx.drawImage(goalViewImg,0,0,goalViewCanvas.width,goalViewCanvas.height);
+
+  // 🔒 CLIP — NADA FORA DO GOL
+  gvctx.save();
+  gvctx.beginPath();
+  gvctx.rect(
+    GOAL_AREA.x,
+    GOAL_AREA.y,
+    GOAL_AREA.width,
+    GOAL_AREA.height
+  );
+  gvctx.clip();
+
+  const vis = getVisiblePoints().filter(p=>p.goalPoint);
+
+  // === HEATMAP DO GOL ===
+  if(heatmapOn){
+    drawGoalHeatmap(vis);
+  }
+
+  // === MARCADORES ===
+  vis.forEach(p=>{
+    const { x, y } = p.goalPoint;
+
+    // segurança extra
+    if(
+      x < GOAL_AREA.x ||
+      x > GOAL_AREA.x + GOAL_AREA.width ||
+      y < GOAL_AREA.y ||
+      y > GOAL_AREA.y + GOAL_AREA.height
+    ) return;
+
+    if(p.resultadoJogada === 'gol'){
+      gvctx.font = 'bold 12px Arial';
+      gvctx.textAlign = 'center';
+      gvctx.textBaseline = 'middle';
+      gvctx.fillText('⚽', x, y);
+    }
+
+    else if(p.resultadoJogada === 'noGol'){
+      gvctx.fillStyle = '#16A34A';
+      gvctx.beginPath();
+      gvctx.arc(x, y, 5, 0, Math.PI*2);
+      gvctx.fill();
+    }
+  });
+
+  gvctx.restore(); // 🔓 libera canvas
+}
+
+finalizou.onchange = ()=>{
+  if(finalizou.checked){
+    enableTab('tab-final');
+  }
+};
+
+teveFalha.onchange = ()=>{
+  if(teveFalha.checked){
+    enableTab('tab-avanc');
+  }
+};
+
+resultadoJogada.onchange = ()=>{
+  const ativo =
+    resultadoJogada.value === 'gol' ||
+    resultadoJogada.value === 'noGol';
+
+  goalEditWrapper.style.display = ativo ? 'block' : 'none';
+
+  if(ativo){
+    enableTab('tab-resultado');
+    renderGoalEdit();
+  }
+
+  if(heatmapOn){
+  drawGoalHeatmap();
+}
+
+};
+
+
+
+
+
+
+const goalEditCanvas = document.getElementById('goalEditCanvas');
+const gectx = goalEditCanvas.getContext('2d');
+const goalEditImg = new Image();
+goalEditImg.src = 'gol.jpeg';
+
+let tempGoalPoint = null;
+const goalEditWrapper = document.getElementById('goalEditWrapper');
+let savedGoalPoint = null;
+let savedGoalResult = null;
+
+
+function renderGoalEdit(){
+  gectx.clearRect(0,0,goalEditCanvas.width,goalEditCanvas.height);
+  gectx.drawImage(goalEditImg,0,0,goalEditCanvas.width,goalEditCanvas.height);
+
+  if(tempGoalPoint){
+    gectx.fillStyle='#cc0000';
+    gectx.beginPath();
+    gectx.arc(tempGoalPoint.x,tempGoalPoint.y,6,0,Math.PI*2);
+    gectx.fill();
+  }
+}
+
+goalEditCanvas.onclick = e=>{
+  tempGoalPoint = {
+    x: e.offsetX,
+    y: e.offsetY
+  };
+  renderGoalEdit();
+};
+
+function clipGoalMouth(ctx){
+  ctx.save();
+  ctx.beginPath();
+
+  // canto inferior esquerdo
+  ctx.moveTo(GOAL_AREA.x, GOAL_AREA.y + GOAL_AREA.height);
+
+  // sobe pela trave esquerda
+  ctx.lineTo(GOAL_AREA.x, GOAL_AREA.y + 10);
+
+  // curva do travessão (topo da rede)
+  ctx.quadraticCurveTo(
+    GOAL_AREA.x + GOAL_AREA.width / 2, // controle central
+    GOAL_AREA.y - 6,                   // levemente acima
+    GOAL_AREA.x + GOAL_AREA.width,     // fim
+    GOAL_AREA.y + 10
+  );
+
+  // desce pela trave direita
+  ctx.lineTo(GOAL_AREA.x + GOAL_AREA.width, GOAL_AREA.y + GOAL_AREA.height);
+
+  ctx.closePath();
+  ctx.clip();
+}
+
+// === ÁREA REAL DA BOCA DO GOL (AJUSTADA À IMAGEM) ===
+const GOAL_AREA = {
+  x: 28,      // trave esquerda (colada)
+  y: 30,      // topo da rede
+  width: 184, // largura exata entre traves
+  height: 72  // até o chão da rede
+};
+
+const GOAL_ZONES_3 = [
+  { id: 'left',   x1: 0,   x2: 80 },
+  { id: 'center', x1: 80,  x2: 160 },
+  { id: 'right',  x1: 160, x2: 240 }
+];
+
+
+function drawGoalHeatmap(vis){
+
+  // 🔴 RECORTE REAL DO GOL (REMOVE O EXCEDENTE)
+  clipGoalMouth(gvctx);
+
+  const zones = [
+    {
+      name: 'esquerda',
+      x1: GOAL_AREA.x,
+      x2: GOAL_AREA.x + GOAL_AREA.width / 3
+    },
+    {
+      name: 'centro',
+      x1: GOAL_AREA.x + GOAL_AREA.width / 3,
+      x2: GOAL_AREA.x + 2 * GOAL_AREA.width / 3
+    },
+    {
+      name: 'direita',
+      x1: GOAL_AREA.x + 2 * GOAL_AREA.width / 3,
+      x2: GOAL_AREA.x + GOAL_AREA.width
+    }
+  ];
+
+  const stats = zones.map(z=>{
+    let total = 0;
+    let gols = 0;
+
+    vis.forEach(p=>{
+      const gp = p.goalPoint;
+      if(!gp) return;
+
+      if(
+        gp.x >= z.x1 &&
+        gp.x <= z.x2 &&
+        gp.y >= GOAL_AREA.y &&
+        gp.y <= GOAL_AREA.y + GOAL_AREA.height
+      ){
+        total++;
+        if(p.resultadoJogada === 'gol') gols++;
+      }
+    });
+
+    return { ...z, total, gols };
+  });
+
+  const max = Math.max(...stats.map(s=>s.total));
+  if(max === 0){
+    gvctx.restore();
+    return;
+  }
+
+  stats.forEach(z=>{
+    if(z.total === 0) return;
+
+    const alpha = (z.total / max) * 0.6;
+    gvctx.fillStyle = `rgba(22,163,74,${alpha})`;
+
+    gvctx.fillRect(
+      z.x1,
+      GOAL_AREA.y,
+      z.x2 - z.x1,
+      GOAL_AREA.height
+    );
+
+    gvctx.fillStyle = '#000';
+    gvctx.font = 'bold 12px Arial';
+    gvctx.textAlign = 'center';
+    gvctx.textBaseline = 'bottom';
+
+    gvctx.fillText(
+      `${z.gols}/${z.total}`,
+      (z.x1 + z.x2) / 2,
+      GOAL_AREA.y + GOAL_AREA.height / 2
+    );
+  });
+
+  gvctx.restore(); // 🔓 libera o canvas
+}
+function resetAllState(){
+  points = [];
+  
+  pendingClick = null;
+  editingIndex = null;
+  tempGoalPoint = null;
+  savedGoal = null;
+
+  statFilters = {};
+
+  // reset filtros visuais
+  filterShow = 'both';
+  filterBP = 'all';
+  filterLado = 'all';
+
+  document.getElementById('filterShow').value = 'both';
+  document.getElementById('filterBP').value = 'all';
+  document.getElementById('filterLado').value = 'all';
+  importCSV.value = '';
+
+  // limpa canvas do gol
+  if(goalViewImg.complete){
+    gvctx.clearRect(0,0,goalViewCanvas.width,goalViewCanvas.height);
+    gvctx.drawImage(goalViewImg,0,0,goalViewCanvas.width,goalViewCanvas.height);
+  }
+
+  render();
+}
+
+
+
+</script>
+
+</body>
+</html>
