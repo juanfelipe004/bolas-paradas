@@ -3,10 +3,19 @@
   <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="icon" href="bahia.png" type="png">
-  <link rel="apple-touch-icon" href="bahia.png">
+  <link rel="icon" href="logo.png" type="png">
+  <link rel="apple-touch-icon" href="logo.png">
   <title>Marcador de Bolas Paradas</title>
   <style>
+
+
+html {
+  transform: scale(0.67);
+  transform-origin: top left;
+  width: calc(100% / 0.67);
+  height: calc(100% / 0.67);
+}
+
 
     #appFooter {
   width: 100%;
@@ -90,7 +99,7 @@ body {
 #brandLogo {
   width: 60px;
   height: 60px;
-  background-image: url('bahia.png');
+  background-image: url('logo.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -464,8 +473,8 @@ button:focus:not(:focus-visible) {
   <div id="brandBar" style="margin-bottom: 10px; padding-top: 2px !important;">
     <div id="brandLogo"></div>
     <div id="brandInfo">
-      <div id="brandTitle">Esporte Clube Bahia SAF</div>
-      <div id="brandSub">Categoria de base • Temporada 2026</div>
+      <div id="brandTitle">Análise de Bolas Paradas</div>
+      <div id="brandSub">Sistema de suporte à decisão para treinos, ajustes e preparação de jogo.</div>
     </div>
   </div>
 
@@ -567,13 +576,13 @@ button:focus:not(:focus-visible) {
   </div>
   <!-- COBRADORES -->
     <div>
-      <h4>Cobradores ECB</h4>
+      <h4>Cobradores</h4>
       <div id="cobradoresCard" class="panel scroll-card"></div>
     </div>
 
     <!-- JOGADORES -->
     <div>
-      <h4>Jogadores ECB</h4>
+      <h4>Jogadores</h4>
       <div id="jogadoresCard" class="panel scroll-card"></div>
     </div>
     </div>
@@ -1620,53 +1629,52 @@ let filterJogadores = new Set();
     });
   });
 
-  btnExportPNG.onclick=()=>{
+ btnExportPNG.onclick = () => {
 
-    const o=document.createElement('canvas');
-    o.width=canvas.width;
-    o.height=canvas.height;
-    const ox=o.getContext('2d');
+  const vis = getVisiblePoints(); // usa exatamente o que está na tela
 
-    // fundo
-    ox.drawImage(img,0,0);
+  const legendHeight = 80; // maior para duas linhas
+  const o = document.createElement('canvas');
+  o.width = canvas.width;
+  o.height = canvas.height + legendHeight;
+  const ox = o.getContext('2d');
 
-    // === FILTRA PONTOS VISÍVEIS ===
-    const vis = points.filter(p=>{
-      if(filterShow==='ofensivo' && p.situacao!=='ofensiva') return false;
-      if(filterShow==='defensivo' && p.situacao!=='defensiva') return false;
-      if(filterBP!=='all' && p.tipoBP!==filterBP) return false;
-      return true;
-    });
+  // fundo (campo)
+  ox.drawImage(img, 0, 0);
 
-    // === HEATMAP PARA EXPORTAÇÃO ===
-    if(heatmapOn){
-      const hcounts = HEAT_REGIONS.map(r=>({
-        r,
-        count: vis.filter(p=>p.x>=r.x1 && p.x<=r.x2 && p.y>=r.y1 && p.y<=r.y2).length
-      }));
+  // =========================
+  // HEATMAP SE ATIVO
+  // =========================
+  if (heatmapOn) {
+    const hcounts = HEAT_REGIONS.map(r => ({
+      r,
+      count: vis.filter(p => p.x >= r.x1 && p.x <= r.x2 && p.y >= r.y1 && p.y <= r.y2).length
+    }));
 
-      const hmax = Math.max(...hcounts.map(c=>c.count));
+    const hmax = Math.max(...hcounts.map(c => c.count));
 
-      if(hmax>0){
-        hcounts.forEach(({r,count})=>{
-          const a = (count/hmax)*0.8 + 0.1;
-          ox.fillStyle = `rgba(0,80,200,${a})`;
-          ox.fillRect(r.x1, r.y1, r.x2-r.x1, r.y2-r.y1);
+    if (hmax > 0) {
+      hcounts.forEach(({ r, count }) => {
+        const a = (count / hmax) * 0.8 + 0.1;
+        ox.fillStyle = `rgba(0,80,200,${a})`;
+        ox.fillRect(r.x1, r.y1, r.x2 - r.x1, r.y2 - r.y1);
 
-          ox.fillStyle='white';
-          ox.font='bold 22px Arial';
-          ox.textAlign='center';
-          ox.textBaseline='middle';
-          ox.fillText(count, r.x1+(r.x2-r.x1)/2, r.y1+(r.y2-r.y1)/2);
-        });
-      }
+        ox.fillStyle = 'white';
+        ox.font = 'bold 22px Arial';
+        ox.textAlign = 'center';
+        ox.textBaseline = 'middle';
+        ox.fillText(count, r.x1 + (r.x2 - r.x1) / 2, r.y1 + (r.y2 - r.y1) / 2);
+      });
     }
+  }
 
-    // === PONTOS VISÍVEIS ===
-    vis.forEach(p=>{
+  // =========================
+  // DESENHA OS PONTOS
+  // =========================
+  vis.forEach(p => {
     ox.lineWidth = 2;
 
-    // === COBRANÇA PARA FORA – PRIORITÁRIO ===
+    // COBRANÇA PRA FORA (prioritário)
     if (p.cobFora) {
       ox.strokeStyle = "#cc0000";
       ox.lineWidth = 6;
@@ -1676,92 +1684,135 @@ let filterJogadores = new Set();
       ox.moveTo(p.x + 10, p.y - 10);
       ox.lineTo(p.x - 10, p.y + 10);
       ox.stroke();
-      return; // NÃO DESENHA MAIS NADA
+      return;
     }
 
-    // === TEVE GOL ===
+    // GOL
     if (p.teveGol) {
       ox.fillStyle = p.cor;
       ox.strokeStyle = "#000";
       ox.beginPath();
-      ox.moveTo(p.x,p.y-12);
-      ox.lineTo(p.x+12*0.3,p.y-12*0.3);
-      ox.lineTo(p.x+12,p.y);
-      ox.lineTo(p.x+12*0.3,p.y+12*0.3);
-      ox.lineTo(p.x,p.y+12);
-      ox.lineTo(p.x-12*0.3,p.y+12*0.3);
-      ox.lineTo(p.x-12,p.y);
-      ox.lineTo(p.x-12*0.3,p.y-12*0.3);
+      ox.moveTo(p.x, p.y - 12);
+      ox.lineTo(p.x + 12 * 0.3, p.y - 12 * 0.3);
+      ox.lineTo(p.x + 12, p.y);
+      ox.lineTo(p.x + 12 * 0.3, p.y + 12 * 0.3);
+      ox.lineTo(p.x, p.y + 12);
+      ox.lineTo(p.x - 12 * 0.3, p.y + 12 * 0.3);
+      ox.lineTo(p.x - 12, p.y);
+      ox.lineTo(p.x - 12 * 0.3, p.y - 12 * 0.3);
       ox.closePath();
       ox.fill(); ox.stroke();
     }
 
-    // === CHANCE CLARA ===
+    // CHANCE CLARA
     else if (p.qualidadeChance === 'clara') {
       drawAlertTrianglePNG(ox, p.x, p.y, 12, CLARA_COLORS[p.tipo]);
     }
 
-    // === CASO NORMAL ===
+    // NORMAL
     else {
       ox.fillStyle = p.cor;
       ox.strokeStyle = p.finalizou ? "#000" : "transparent";
       ox.beginPath();
-      ox.arc(p.x,p.y,10,0,Math.PI*2);
+      ox.arc(p.x, p.y, 10, 0, Math.PI * 2);
       ox.fill(); ox.stroke();
     }
 
-    // === LETRA D/E/C (menos no triângulo com clara) ===
-    if(p.qualidadeChance !== 'clara'){
-      ox.font='10px Arial';
-      ox.fillStyle='white';
-      ox.textAlign='center';
-      ox.textBaseline='middle';
+    // LETRA (D/E/C)
+    if (p.qualidadeChance !== 'clara') {
+      ox.font = '10px Arial';
+      ox.fillStyle = 'white';
+      ox.textAlign = 'center';
+      ox.textBaseline = 'middle';
       const letra = p.lado ? p.lado[0].toUpperCase() : '';
-      ox.fillText(letra,p.x,p.y);
+      ox.fillText(letra, p.x, p.y);
     }
   });
 
-    function drawAlertTriangle(x, y, r, bgColor) {
-    const h = r * 1.5; // triângulo mais alto para cortar "pé"
+  // =========================
+  // LEGENDA INFERIOR (AUTO QUEBRA)
+  // =========================
+  (function drawLegend() {
+    ox.font = "14px Arial";
+    ox.textBaseline = "middle";
+    ox.textAlign = "left";
 
-    // Triângulo
-    ctx.beginPath();
-    ctx.moveTo(x, y - h * 0.52);      // topo
-    ctx.lineTo(x + r, y + h * 0.48);  // base direita
-    ctx.lineTo(x - r, y + h * 0.48);  // base esquerda
-    ctx.closePath();
+    const items = [
+      { type: "box", color: "#0033AA", text: "Viajada" },
+      { type: "box", color: "#D61B1B", text: "Rápida" },
+      { type: "box", color: "#EFB900", text: "Curta" },
+      { type: "text", text: "⭐ Gol" },
+      { type: "text", text: "● Sem gol" },
+      { type: "text", text: "⚠ Chance clara" },
+      { type: "text", text: "Contorno preto = finalizou" },
+      { type: "text", text: "D/E/C = lado da cobrança" },
+    ];
 
-    ctx.fillStyle = bgColor;
-    ctx.fill();
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    const maxWidth = o.width * 0.9;
+    const lineGap = 22;
+    const itemGap = 18;
 
-    // Cor da exclamação
-    let exclColor = "#000";
-    if (bgColor === CLARA_COLORS.viajada) exclColor = "#fff";
+    let lines = [[]];
+    let currentWidth = 0;
 
-    // Ajuste fino da posição do "!"
-    ctx.fillStyle = exclColor;
-    ctx.font = `${r * 1.45}px Arial`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+    items.forEach(item => {
+      const boxW = item.type === "box" ? 20 : 0;
+      const textW = ox.measureText(item.text).width;
+      const totalItemW = boxW + (boxW ? 6 : 0) + textW + itemGap;
 
-    // deslocamento leve para cima (remove "pé" visual)
-    ctx.fillText("!", x, y - (h * 0.10));
-  }
-
-
-    // === EXPORTA PNG ===
-    o.toBlob(b=>{
-      const url=URL.createObjectURL(b);
-      const a=document.createElement('a');
-      a.href=url;
-      a.download='mapa.png';
-      a.click();
+      if (currentWidth + totalItemW > maxWidth) {
+        lines.push([]);
+        currentWidth = 0;
+      }
+      lines.at(-1).push(item);
+      currentWidth += totalItemW;
     });
 
-  };
+    const totalHeight = lines.length * lineGap;
+    const startY = canvas.height + (legendHeight - totalHeight) / 2 + 5;
+
+    lines.forEach((line, li) => {
+      let lineWidth = 0;
+      line.forEach(item => {
+        const boxW = item.type === "box" ? 20 : 0;
+        const textW = ox.measureText(item.text).width;
+        lineWidth += boxW + (boxW ? 6 : 0) + textW + itemGap;
+      });
+      lineWidth -= itemGap;
+
+      let x = (o.width - lineWidth) / 2;
+      const y = startY + li * lineGap;
+
+      line.forEach(item => {
+        if (item.type === "box") {
+          ox.fillStyle = item.color;
+          ox.fillRect(x, y - 7, 14, 14);
+          ox.strokeStyle = "rgba(0,0,0,0.5)";
+          ox.strokeRect(x, y - 7, 14, 14);
+          x += 20;
+          ox.fillStyle = "black";
+          ox.fillText(item.text, x, y);
+          x += ox.measureText(item.text).width + itemGap;
+        } else {
+          ox.fillStyle = "black";
+          ox.fillText(item.text, x, y);
+          x += ox.measureText(item.text).width + itemGap;
+        }
+      });
+    });
+  })();
+
+  // =========================
+  // SALVAR PNG
+  // =========================
+  o.toBlob(b => {
+    const url = URL.createObjectURL(b);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "mapa_filtrado.png";
+    a.click();
+  });
+};
 
   function drawAlertTrianglePNG(ox, x, y, r, bgColor) {
     const h = r * 1.5;
