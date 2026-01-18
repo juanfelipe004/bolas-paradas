@@ -7,506 +7,445 @@
   <link rel="apple-touch-icon" href="bahia.png">
   <title>Marcador de Bolas Paradas</title>
   <style>
-    
-  /* ================================
-    FONTE / TEMA BAHIA
-  ================================ */
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-
-  :root {
-    --white: #ffffff;
-    --bg: #f7f9fc;
-    --panel: #ffffff;
-    --border: #d8dee6;
-    --border-dark: #c4ccd7;
-    --text: #1d1e22;
-    --text-secondary: #596273;
-
-    --primary: #0033AA;
-    --primary-dark: #00247A;
-    --primary-soft: #E6ECF9;
-
-    --warn: #D61B1B;
-    --success: #16A34A;
-
-    --hover: #f1f5fb;
-    --focus: #EBF2FF;
-
-    --space-4: 4px;
-    --space-8: 8px;
-    --space-12: 12px;
-    --space-16: 16px;
-    --space-20: 20px;
-    --space-24: 24px;
-  }
-
-  body {
-    font-family: 'Inter', Arial, sans-serif;
-    margin: 0;
-    padding: var(--space-12);
-    background: var(--bg);
-    color: var(--text);
-    font-size: 14px;
-  }
-
-  /* ================================
-    BRAND BAR CENTRALIZADO
-  ================================ */
-  #brandBar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1px;
-    padding: var(--space-16) 0 var(--space-8) 0;
-  }
-
-  #brandLogo {
-    width: 60px;
-    height: 60px;
-    background-image: url('bahia.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
-  #brandInfo {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: left;
-  }
-
-  #brandTitle {
-    font-weight: 600;
-    font-size: 18px;
-    padding-top: 10px;
-  }
-
-  #brandSub {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-top: 2px;
-  }
-
-  /* ================================
-    HEADER PRINCIPAL
-  ================================ */
-  h2 {
-    text-align: center;
-    font-weight: 600;
-    font-size: 20px;
-  }
-
-  h2 + div {
-    text-align: center;
-    color: var(--text-secondary);
-    font-size: 13px;
-    margin-bottom: var(--space-12);
-  }
-
-  /* ================================
-    TOOLBAR
-  ================================ */
-  .toolbar {
-    display: flex;
-    gap: var(--space-8);
-    flex-wrap: wrap;
-    margin-bottom: var(--space-16);
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: var(--space-12);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  }
-
-  /* Botões / Inputs / Selects */
-  button, select, input[type="text"], input[type="number"] {
-    padding: var(--space-8) var(--space-12);
-    border-radius: 6px;
-    border: 1px solid var(--border-dark);
-    font-size: 14px;
-    background: var(--white);
-    cursor: pointer;
-    transition: all .2s ease;
-  }
-
-  button {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: var(--white);
-    font-weight: 500;
-  }
-
-  button:hover {
-    background: var(--primary-dark);
-  }
-
-  button:active {
-    opacity: .85;
-  }
-
-  select:hover, input:hover {
-    background: var(--hover);
-  }
-
-  select:focus, input:focus, button:focus {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-  }
-
-  /* ================================
-    MAPA
-  ================================ */
-  #mapColumn {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: var(--space-12);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-  }
-
-  /* ================================
-    PANEL GENÉRICO
-  ================================ */
-  .panel {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: var(--space-12);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  }
-
-  .panel2{
-    height: 164px;
-  }
-
-  /* ================================
-    PONTOS MARCADOS (LISTA)
-  ================================ */
-  .point-row {
-    display: flex;
-    justify-content: space-between;
-    padding: var(--space-12) 0;
-    border-bottom: 1px dashed var(--border);
-    font-size: 14px;
-  }
-
-  #pointsList {
-    max-height: 420px;
-    overflow-y: auto;
-    padding-right: var(--space-4);
-  }
-
-  /* ================================
-    STATS GRID (CORRIGIDA)
-  ================================ */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: var(--space-12);
-  }
-
-  @media (max-width: 1440px) {
-    .stats-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  @media (max-width: 900px) {
-    .stats-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 600px) {
-    .stats-grid {
-      grid-template-columns: repeat(1, 1fr);
-    }
-  }
-
-
-  .stats-block {
-    background: var(--white);
-    padding: var(--space-12);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    white-space: pre-line;
-    line-height: 1.4;
-  }
-
-  /* ================================
-    MODAL CORRIGIDO
-  ================================ */
-  .overlay {
-    position: fixed !important;
-    inset: 0;
-    background: rgba(0,0,0,0.45) !important;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-  }
-
-  .modal {
-    background: var(--white);
-    width: 540px;
-    max-height: 90vh;
-    overflow-y: auto;
-    border-radius: 10px;
-    display: block;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.25);
-  }
-
-  .modal .header {
-    padding: var(--space-12);
-    border-bottom: 1px solid var(--border);
-    font-weight: 600;
-    font-size: 15px;
-  }
-
-  .tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .tab {
-    flex: 1;
-    padding: var(--space-8);
-    text-align: center;
-    cursor: pointer;
-    background: #f0f2f6;
-    font-weight: 500;
-    border-right: 1px solid var(--border);
-    user-select: none;
-  }
-
-  .tab.active {
-    background: var(--white);
-    border-bottom: 2px solid var(--primary);
-    color: var(--primary);
-  }
-
-  .tab-content {
-    display: none;
-    padding: var(--space-12);
-    font-size: 14px;
-  }
-
-  .tab-content.active {
-    display: block;
-  }
-
-  .row {
-    display: flex;
-    align-items: center;
-    margin-bottom: var(--space-12);
-    gap: var(--space-8);
-  }
-
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--space-8);
-    padding: var(--space-12);
-    border-top: 1px solid var(--border);
-  }
-
-  /* ================================
-    RESPONSIVO
-  ================================ */
-  @media (max-width: 1080px) {
-    #layoutRow { flex-direction: column; }
-    #rightColumn { flex-direction: column; }
-  }
-
-  @media (max-width: 720px) {
-    .toolbar { padding: var(--space-8); }
-  }
-  /* ================================
-    CHECKBOX DE ESTATÍSTICA (RESTORED)
-  ================================ */
-  .stat-checkbox {
-    width: 14px;
-    height: 14px;
-    border: 2px solid var(--primary);
-    border-radius: 4px;
-    display: inline-block;
-    margin-left: 6px;
-    cursor: pointer;
-    transition: all .15s ease-in-out;
-    vertical-align: middle;
-  }
-
-  .stat-checkbox.active {
-    background: var(--primary);
-  }
-
-  .stats-block div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    line-height: 20px;
-    margin-bottom: 4px;
-  }
-
-  .stats-block input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    margin-left: 8px;
-    flex-shrink: 0;
-    cursor: pointer;
-  }
-
-  .point-row {
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0;
-    border-bottom: 1px dashed var(--border);
-  }
-
-  .point-row .main-line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-  }
-
-  .point-row .coords {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-left: 24px;
-    margin-top: 2px;
-  }
-
-  /* ================================
-    LISTAGEM (FORMATO APROVADO)
-  ================================ */
-  .point-row {
-    display: flex;
-    flex-direction: column;
-    padding: 12px 0;
-    border-bottom: 1px dashed var(--border);
-    font-size: 14px;
-  }
-
-  .point-row .main-line {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: 500;
-  }
-
-  .point-row .main-line span {
-    display: inline-block;
-    font-weight: 400;
-  }
-
-  .point-row .coords {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-left: 26px; /* indent */
-  }
-
-  .point-row .icons {
-    display: flex;
-    gap: 4px;
-    font-size: 15px;
-  }
-
-  /* Botão Editar dentro da lista */
-  .point-row .row-actions {
-    margin-left: auto;
-  }
-
-  .point-row button {
-    padding: 4px 8px;
-    font-size: 12px;
-    border-radius: 6px;
-  }
-
-  /* Hover de linha */
-  .point-row:hover {
-    background: var(--hover);
-    transition: background .15s;
-  }
-  .point-row {
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0;
-    border-bottom: 1px dashed var(--border);
-  }
-
-  .point-row .main-line {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-  }
-
-  .point-row .main-line b {
-    font-weight: 600;
-  }
-
-  .point-row .icons {
-    display: flex;
-    gap: 4px;
-    font-size: 15px;
-  }
-
-  .point-row .row-actions {
-    margin-left: auto;
-    display: flex;
-    gap: 6px;
-  }
-
-  .point-row .coords {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-left: 22px;
-    margin-top: 2px;
-  }
-
-  .point-row:hover {
-    background: var(--hover);
-    transition: background .15s;
-  }
-  .stat-line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2px 0;
-  }
-
-  .stat-text {
-    display: inline-block;
-    line-height: 18px;
-  }
-
-  .stat-check {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    cursor: pointer;
-    accent-color: var(--primary);
-  }
-  .panel img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 6px;
-    object-fit: contain;
-  }
-  .scroll-card{
-    max-height: 120px;   /* altura para ~2 jogadores */
-    overflow-y: auto;
-  }
-  h4{
-    text-align: center;
-  }
-
+ /* ================================
+   FONTE / TEMA BAHIA MODERNO
+=============================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --white: #ffffff;
+  --bg: #EEF2F7;
+  --panel: #ffffff;
+  --panel-soft: #F7F9FC;
+
+  --border: #D3DAE4;
+  --border-dark: #B3BBC8;
+  --border-strong: #8A93A3;
+
+  --text: #1D1E22;
+  --text-secondary: #5D6472;
+
+  --primary: #002A6E;
+  --primary-dark: #001C49;
+  --primary-soft: #E3ECFF;
+
+  --accent: #E10600;
+  --success: #16A34A;
+  --warn: #D61B1B;
+
+  --hover: #F1F4FB;
+  --focus: #D6E3FF;
+
+  --radius: 8px;
+  --radius-lg: 10px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.10);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+
+  --transition: .22s cubic-bezier(.22,.61,.36,1);
+
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+}
+
+/* ================================
+   GLOBAL
+=============================== */
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  margin: 0;
+  padding: var(--space-12);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ================================
+   BRAND BAR CENTRALIZADO
+=============================== */
+#brandBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: var(--space-12) 0 var(--space-8) 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+#brandLogo {
+  width: 60px;
+  height: 60px;
+  background-image: url('bahia.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.16));
+}
+
+#brandInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+#brandTitle {
+  font-weight: 600;
+  font-size: 19px;
+  color: var(--primary-dark);
+}
+
+#brandSub {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ================================
+    HEADERS
+=============================== */
+h2 {
+  text-align: center;
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+
+h2 + div {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: var(--space-12);
+}
+
+h4 {
+  text-align: center;
+  margin: 0 0 6px 0;
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+/* ================================
+   TOOLBAR
+=============================== */
+.toolbar {
+  display: flex;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-16);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-12);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ================================
+   BOTÕES E INPUTS
+=============================== */
+button, select, input[type="text"], input[type="number"] {
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-dark);
+  font-size: 14px;
+  background: var(--white);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+/* primário */
+button {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+  font-weight: 500;
+}
+button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+button:active {
+  transform: scale(.98);
+}
+
+/* secundário */
+button.btn-small,
+button[style*="Excluir"],
+button[style*="Cancelar"] {
+  background: var(--panel-soft);
+  border: 1px solid var(--border-dark);
+  color: var(--text);
+}
+button.btn-small:hover,
+button[style*="Cancelar"]:hover {
+  background: var(--hover);
+}
+
+/* delete */
+button[style*="color:#900"],
+button[style*="Excluir"] {
+  color: var(--warn) !important;
+}
+button[style*="Excluir"]:hover {
+  background: #ffe6e6 !important;
+}
+
+/* selects e inputs */
+select:hover, input:hover {
+  background: var(--hover);
+}
+/* DESATIVA OUTLINE PERSISTENTE */
+button:focus,
+select:focus,
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+/* EVITA FOCUS PRESO APÓS O CLICK */
+button:focus-visible {
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+button:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+
+/* ================================
+   MAPAS E PAINÉIS
+=============================== */
+#mapColumn {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-12);
+  box-shadow: var(--shadow-sm);
+}
+
+/* painéis padrão */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-12);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.panel:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* painel com altura fixa */
+.panel2 {
+  height: 164px;
+}
+
+/* imagens internas */
+.panel img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  object-fit: contain;
+}
+
+/* cartões com scroll */
+.scroll-card {
+  max-height: 225px;
+  overflow-y: auto;
+}
+
+/* ================================
+   PONTOS MARCADOS (LISTA)
+=============================== */
+.point-row {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.point-row:hover {
+  background: var(--hover);
+  padding-left: 4px;
+}
+
+.point-row .main-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.point-row .row-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.point-row .coords {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: 24px;
+  margin-top: 2px;
+}
+
+/* ================================
+   STATS GRID
+=============================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-12);
+}
+
+@media (max-width: 1440px) {
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .stats-grid { grid-template-columns: repeat(1, 1fr); }
+}
+
+.stats-block {
+  background: linear-gradient(180deg, var(--panel), var(--panel-soft));
+  padding: var(--space-12);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  white-space: pre-line;
+  line-height: 1.4;
+  transition: var(--transition);
+}
+.stats-block:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* check stats */
+.stat-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+}
+.stat-text {
+  line-height: 18px;
+}
+.stat-check {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+/* ================================
+   MODAL
+=============================== */
+.overlay {
+  position: fixed !important;
+  inset: 0;
+  background: rgba(0,0,0,0.45) !important;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  backdrop-filter: blur(2px);
+}
+
+.modal {
+  background: var(--white);
+  width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  animation: modalIn .28s var(--transition);
+}
+
+.modal .header {
+  padding: var(--space-12);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--primary-dark);
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.92);}
+  to   { opacity: 1; transform: scale(1);}
+}
+
+/* tabs */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.tab {
+  flex: 1;
+  padding: var(--space-8);
+  text-align: center;
+  cursor: pointer;
+  background: var(--panel-soft);
+  font-weight: 500;
+  border-right: 1px solid var(--border);
+  user-select: none;
+  transition: var(--transition);
+}
+.tab:hover {
+  background: var(--hover);
+}
+.tab.active {
+  background: var(--white);
+  border-bottom: 2px solid var(--primary);
+  color: var(--primary-dark);
+}
+
+.tab-content {
+  display: none;
+  padding: var(--space-12);
+  font-size: 14px;
+}
+.tab-content.active {
+  display: block;
+}
+
+/* MODAL ROWS */
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-12);
+  gap: var(--space-8);
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-8);
+  padding: var(--space-12);
+  border-top: 1px solid var(--border);
+}
+
+/* ================================
+   RESPONSIVO
+=============================== */
+@media (max-width: 1080px) {
+  #layoutRow { flex-direction: column; }
+  #rightColumn { flex-direction: column; }
+}
+@media (max-width: 720px) {
+  .toolbar { padding: var(--space-8); }
+}
 
   </style>
   </head>
@@ -560,7 +499,10 @@
     <option value="esquerdo">Esquerdo</option>
     <option value="central">Central</option>
   </select>
+  <button id="btnHelp" style="margin-left:auto; background-color: red;">Manual</button>
+
   </div>
+  
 
 
   <div style="display:flex; gap:16px; align-items:flex-start;">
@@ -577,7 +519,7 @@
   ">
 
     <!-- MAPA (GRUDADO ESQUERDA) -->
-    <div id="mapColumn" style="flex:0 0 auto; margin-right:15px;">
+    <div id="mapColumn" style="flex:0 0 auto; margin-right:15px; margin-top: 45px;">
       <canvas id="canvas" width="1200" height="600"></canvas>
     </div>
 
@@ -587,6 +529,7 @@
     grid-template-columns: 260px 260px;
     grid-template-rows: auto auto;
     gap:15px;
+    margin-top: 20px;
   ">
   <!-- LEGENDA (COLADA) -->
       <div style="width:260px;">
@@ -625,12 +568,25 @@
     </div>
     </div>
 
+<div style="margin-top:20px; width:25%; margin-left: 10px;">
+  <h4 style="margin:0; text-align:center;">Tomada de Decisão</h4>
+
+  <div id="decisionPanel"
+       class="panel"
+       style="max-height:450px; overflow:auto; margin-top:10px;">
+    Carregando análises...
+  </div>
+</div>
+
+
+
+
+
     <!-- LISTA PONTOS (CIMA) -->
       <div style="flex:1; max-width:calc(100% - 260px);margin-top: 20px; margin-left: 10px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;"
-            onclick="togglePointsList()">
+        <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
           <h4 style="margin:0;">Pontos Marcados</h4>
-          <span id="pointsToggle" style="font-size:18px;">▼</span>
+         
         </div>
 
         <div id="pointsPanel" class="panel" style="max-height:450px; overflow:auto; margin-top:6px;">
@@ -1074,7 +1030,7 @@ let filterJogadores = new Set();
     updateUI();
     renderGoalView();
   renderPlayersCards();
-
+    renderDecision();
 
   }
 
@@ -1826,6 +1782,66 @@ let filterJogadores = new Set();
   window.openModalEdit=openModalEdit;
   </script>
 
+<div id="overlayHelp" class="overlay">
+  <div class="modal" style="width:600px; max-width:90%;">
+    <div class="header">Guia de uso do sistema</div>
+
+    <div class="tab-content active" style="display:block; padding:16px; font-size:14px; line-height:1.45;">
+      <b>Objetivo do software</b><br>
+      Ferramenta para análise de bolas paradas, permitindo registro, filtragem, exportação e avaliação tática.
+      <br>
+
+      <b><br>⚠️ IMPORTANTE: O SISTEMA NÃO ARMAZENA OS EVENTOS APÓS RECARREGAR A PÁGINA OU SAIR DO NAVEGADOR. SE PRECISAR PAUSAR OU ENCERRAR O TRABALHO, UTILIZE "EXPORTAR CSV" PARA SALVAR O PROGRESSO E PODER RETOMAR POSTERIORMENTE IMPORTANDO O ARQUIVO NOVAMENTE.</b>
+
+      <br><br><b>Como registrar um evento</b>
+      <ul style="margin:6px 0;">
+        <li>Clique no mapa principal para criar um ponto.</li>
+        <li>Preencha informações de cobrança, lado, primeiro contato, resultado, etc.</li>
+        <li>Salvar registra o evento na base interna.</li>
+      </ul>
+
+      <b>Como editar/remover eventos</b>
+      <ul style="margin:6px 0;">
+        <li>Clique em uma bolinha já existente → abre modal de edição.</li>
+        <li>Listagem lateral permite editar/excluir rapidamente.</li>
+      </ul>
+
+      <b>Filtragem e visualização</b>
+      <ul style="margin:6px 0;">
+        <li><b>Mostrar</b>: ofensivo / defensivo / ambos.</li>
+        <li><b>BP</b>: escanteio / falta indireta.</li>
+        <li><b>Lado</b>: direito / esquerdo / central.</li>
+        <li><b>Heatmap</b>: ON/OFF para visualizar densidade de ações.</li>
+      </ul>
+
+      <b>Estatísticas</b>
+      <ul style="margin:6px 0;">
+        <li>Contagem automática por tipo de cobrança, lado, resultados.</li>
+        <li>Checkboxs criam filtros internos avançados.</li>
+        <li>Jogadores e cobradores possuem ranking automático.</li>
+      </ul>
+
+      <b>Como funciona a Tomada de Decisão</b>
+      <ul style="margin:6px 0;">
+        <li>Baseia-se em volume (quantidade) + eficiência (gols, finalizações, 1º contato) + risco (transições).</li>
+        <li>Ofensivo considera: gols, finalizações, 1º contato, continuidade.</li>
+        <li>Defensivo considera: gols sofridos, finalizações contra, transições.</li>
+        <li>Recomenda priorização com base estatística, não opinião.</li>
+      </ul>
+
+      <b>Exportação</b>
+      <ul style="margin:6px 0;">
+        <li>Exportar CSV → exporta tabela bruta com todos os eventos.</li>
+        <li>Importar CSV → importa tabela bruta com todos os eventos já feitos.</li>
+        <li>Exportar PNG/PDF → representação visual + relatórios.</li>
+      </ul>
+    </div>
+
+    <div class="actions">
+      <button id="btnHelpClose" class="btn-small" style="background-color: red; color: white;">Entendi</button>
+    </div>
+  </div>
+</div>
 
   <script>
 
@@ -2334,61 +2350,414 @@ function bindPlayerCheckboxEvents(){
     };
   });
 }
+  function renderDecision(){
+  const vis = getVisiblePoints();
+  const panel = document.getElementById("decisionPanel");
+
+  if(!vis || vis.length === 0){
+    panel.innerHTML = "Sem dados suficientes para tomada de decisão.";
+    return;
+  }
+
+  // ============================
+  // AGRUPADOR TÁTICO
+  // ============================
+  const key = p => `${p.tipoBP} | ${p.lado} | ${p.tipo}`;
+  const groups = {};
+  vis.forEach(p=>{
+    const k = key(p);
+    if(!groups[k]) groups[k]=[];
+    groups[k].push(p);
+  });
+
+  // ============================
+  // ANÁLISE TÁTICA DE COMBOS
+  // ============================
+  const analysis = Object.keys(groups).map(k=>{
+    const arr = groups[k];
+    const ofensivos = arr.filter(p=>p.situacao==='ofensiva');
+    const defensivos = arr.filter(p=>p.situacao==='defensiva');
+
+    const qtdOf = ofensivos.length;
+    const qtdDef = defensivos.length;
+
+    const gols = ofensivos.filter(p=>p.teveGol).length;
+    const fins = ofensivos.filter(p=>p.finalizou).length;
+    const duelosOf = ofensivos.filter(p=>p.primeiroContato==='nosso').length;
+    const trans = ofensivos.filter(p=>p.resultadoJogada==='contraAtaque').length;
+
+    const golsContra = defensivos.filter(p=>p.resultadoJogada==='gol').length;
+    const finsContra = defensivos.filter(p=>p.resultadoJogada==='noGol').length;
+    const duelosDef = defensivos.filter(p=>p.primeiroContato==='nosso').length;
+
+    const penalty = (qtdOf <= 2) ? 0.8 : 0;
+    const scoreAtaque = (gols * 3) + (fins * 1.2) - penalty;
+    const scoreDefesa = (golsContra * 3) + (finsContra * 1.2);
+
+    return {
+      combo:k,
+      qtdOf,
+      qtdDef,
+      gols,
+      fins,
+      duelosOf,
+      trans,
+      golsContra,
+      finsContra,
+      duelosDef,
+      scoreAtaque,
+      scoreDefesa
+    };
+  });
+
+  // ============================
+  // AMOSTRA MÍNIMA
+  // ============================
+  const minOf = a => a.qtdOf >= 3;
+  const minDef = a => a.qtdDef >= 3;
+
+  const ofensivos = analysis.filter(minOf);
+  const defensivos = analysis.filter(minDef);
+
+  const piorOf = ofensivos.slice().sort((a,b)=>a.scoreAtaque - b.scoreAtaque)[0];
+  const melhorOf = ofensivos.slice().sort((a,b)=>b.scoreAtaque - a.scoreAtaque)[0];
+  const trans = ofensivos.slice().sort((a,b)=>b.trans - a.trans)[0];
+  const piorDef = defensivos.slice().sort((a,b)=>b.scoreDefesa - a.scoreDefesa)[0];
+
+  const fmt = c=>{
+    const [bp,lado,tipo]=c.split('|').map(s=>s.trim());
+    return {bp,lado,tipo};
+  };
+
+  // ============================
+  // ZONAS DO HEAT (SEM FALLBACK)
+  // ============================
+
+  const regionsLeft = [
+    {name:"Z1",   x1:253, x2:361, y1:40, y2:150},
+    {name:"zona", x1:362, x2:465, y1:40, y2:150},
+    {name:"Z2",   x1:466, x2:588, y1:40, y2:150}
+  ];
+
+  const regionsRight = [
+    {name:"Z2",   x1:253, x2:361, y1:40, y2:150},
+    {name:"zona", x1:362, x2:465, y1:40, y2:150},
+    {name:"Z1",   x1:466, x2:588, y1:40, y2:150}
+  ];
+
+  let zonasOf = {Z1:0, zona:0, Z2:0};
+  let golsOf  = {Z1:0, zona:0, Z2:0};
+
+  let zonasDef = {Z1:0, zona:0, Z2:0};
+  let golsDef  = {Z1:0, zona:0, Z2:0};
+
+  vis.forEach(p=>{
+    if(!p.lado) return;
+
+    const regions = (p.lado === "direito") ? regionsRight : regionsLeft;
+
+    for(const r of regions){
+      if(p.x>=r.x1 && p.x<=r.x2 && p.y>=r.y1 && p.y<=r.y2){
+
+        // Ofensivo
+        if(p.situacao==='ofensiva'){
+          if(p.finalizou || p.teveGol) zonasOf[r.name]++;
+          if(p.teveGol) golsOf[r.name]++;
+        }
+
+        // Defensivo
+        if(p.situacao==='defensiva'){
+          if(p.finalizou || p.teveGol) zonasDef[r.name]++;
+          if(p.teveGol) golsDef[r.name]++;
+        }
+
+        break;
+      }
+    }
+  });
+
+  function maior(dict){
+    const arr = Object.entries(dict).sort((a,b)=>b[1]-a[1]);
+    return arr[0][1] > 0 ? arr[0][0] : "Sem registro";
+  }
+
+  const zonaFinalMais = maior(zonasOf);
+  const zonaGolMais   = maior(golsOf);
+  const zonaFinalSof  = maior(zonasDef);
+  const zonaGolSof    = maior(golsDef);
+
+  // ============================
+  // FORMATAÇÃO DE TEXTO
+  // ============================
+  const ladoOf = vis.find(p=>p.situacao==='ofensiva' && (p.finalizou||p.teveGol))?.lado || "esquerdo";
+  const ladoDef = vis.find(p=>p.situacao==='defensiva')?.lado || "esquerdo";
+
+  function traduzZona(z, lado){
+    if(z === "zona") return `Meio (batida do lado ${lado})`;
+    if(z === "Z1") return lado==="esquerdo"
+      ? "Primeiro poste (batida do lado esquerdo)"
+      : "Primeiro poste (batida do lado direito)";
+    if(z === "Z2") return lado==="esquerdo"
+      ? "Segundo poste (batida do lado esquerdo)"
+      : "Segundo poste (batida do lado direito)";
+    return "Sem registro";
+  }
+
+  const out = [];
+  const SP = `style="margin-bottom:2px;"`;
+
+  // ============================
+  // SAÍDA TÁTICA
+  // ============================
+  if(piorOf){
+    const {bp,lado,tipo}=fmt(piorOf.combo);
+    out.push(`<div ${SP}><b>✓ No que devemos melhorar:</b> Cobrança de ${bp} pelo lado ${lado} com a batida ${tipo}.</div>`);
+  }
+
+  if(trans && trans.trans>0){
+    const {bp,lado,tipo}=fmt(trans.combo);
+    out.push(`<div ${SP}><b>⚠ Sofremos mais transições:</b> Cobranças de ${bp} pelo lado ${lado} com a batida ${tipo}.</div>`);
+  }
+
+  if(melhorOf){
+    const {bp,lado,tipo}=fmt(melhorOf.combo);
+    out.push(`<div ${SP}><b>🏁 No que fomos mais eficientes:</b> Cobranças de ${bp} pelo lado ${lado} com a batida ${tipo}.</div>`);
+  }
+
+  if(piorDef){
+    const {bp,lado,tipo}=fmt(piorDef.combo);
+    out.push(`<div ${SP}><b>⛔ Devemos ajustar a defesa em:</b> Cobranças de ${bp} pelo lado ${lado} com a batida ${tipo}.</div>`);
+  }
+
+  // ============================
+  // SAÍDA ZONAS
+  // ============================
+  out.push(`<div ${SP}><b>🎯 Zona que mais sofremos finalizações:</b> ${traduzZona(zonaFinalSof, ladoDef)}</div>`);
+  out.push(`<div ${SP}><b>⚽ Zona que mais sofremos gols:</b> ${traduzZona(zonaGolSof, ladoDef)}</div>`);
+  out.push(`<div ${SP}><b>📌 Zona que mais finalizamos:</b> ${traduzZona(zonaFinalMais, ladoOf)}</div>`);
+  out.push(`<div ${SP}><b>⚽ Zona que mais fizemos gols:</b> ${traduzZona(zonaGolMais, ladoOf)}</div>`);
+
+  // ============================
+  // MÉTRICAS CONTEXTO
+  // ============================
+  const totalOf = vis.filter(p=>p.situacao==='ofensiva').length;
+  const totalDef = vis.filter(p=>p.situacao==='defensiva').length;
+  const totalFins = vis.filter(p=>p.situacao==='ofensiva' && p.finalizou).length;
+  const totalFinsAdv = vis.filter(p=>p.situacao==='defensiva' && p.resultadoJogada==='noGol').length;
+  const totalDuelosOf = vis.filter(p=>p.situacao==='ofensiva' && p.primeiroContato==='nosso').length;
+  const totalDuelosDef = vis.filter(p=>p.situacao==='defensiva' && p.primeiroContato==='nosso').length;
+
+  out.push(`<br><b>📊 Métricas de Contexto:</b>`);
+  out.push(`• Finalizamos em ${(totalFins/totalOf*100).toFixed(1)}% das bolas ofensivas.`);
+  out.push(`• Ganhamos a 1ª disputa em ${(totalDuelosOf/totalOf*100).toFixed(1)}% das bolas ofensivas.`);
+  out.push(`• Ganhamos a 1ª disputa em ${(totalDuelosDef/totalDef*100).toFixed(1)}% das bolas defensivas.`);
+  out.push(`• Adversário finalizou em ${(totalFinsAdv/totalDef*100).toFixed(1)}% das bolas defensivas.`);
+
+  panel.innerHTML = out.join("<br>");
+}
+
+
 document.getElementById("btnExportPDF").onclick = async () => {
   const { jsPDF } = window.jspdf;
 
-  // A2 em px @ 96 DPI
-  const a2WidthPx = Math.round(420 / 25.4 * 96);   // 420mm → px
-  const a2HeightPx = Math.round(594 / 25.4 * 96);  // 594mm → px
+  // CONFIG PDF A2
+  const a2WidthPx = Math.round(420 / 25.4 * 96);
+  const a2HeightPx = Math.round(594 / 25.4 * 96);
 
-  const scale = 2; // aumenta resolução
+  // BACKUP DO ESTADO
+  const stateBackup = {
+    show: filterShow,
+    bp: filterBP,
+    lado: filterLado,
+    heat: heatmapOn
+  };
 
-  const content = document.body; // ou selecione um container específico
+  function restoreState(){
+    filterShow = stateBackup.show;
+    filterBP = stateBackup.bp;
+    filterLado = stateBackup.lado;
+    heatmapOn = stateBackup.heat;
+    document.getElementById('filterShow').value = filterShow;
+    document.getElementById('filterBP').value = filterBP;
+    document.getElementById('filterLado').value = filterLado;
+    render();
+  }
 
-  const canvas = await html2canvas(content, {
-    scale,
-    useCORS: true,
-    backgroundColor: "#FFFFFF" // evita fundo cinza
-  });
+  // CAPTURA SOMENTE O CANVAS PRINCIPAL
+  async function captureCanvas(){
+    const canvasMap = document.getElementById("canvas");
+    return new Promise(resolve=>{
+      const imgData = canvasMap.toDataURL("image/png", 1.0);
+      resolve(imgData);
+    });
+  }
 
-  const imgData = canvas.toDataURL("image/jpeg", 0.95);
+  // ===== CAPTURAR OS 5 PRINTS NORMAIS =====
+  async function captureFull(){
+    const canvas = await html2canvas(document.body, { scale:2, useCORS:true, backgroundColor:"#FFFFFF" });
+    return canvas.toDataURL("image/jpeg", 0.95);
+  }
 
+  // PÁGINAS NORMAIS
+  filterShow='both'; filterBP='all'; filterLado='all'; render();
+  const imgGeral = await captureFull();
+
+  filterShow='ofensivo'; filterBP='escanteio'; filterLado='all'; render();
+  const imgOffEsc = await captureFull();
+
+  filterShow='ofensivo'; filterBP='faltaIndireta'; filterLado='all'; render();
+  const imgOffFal = await captureFull();
+
+  filterShow='defensivo'; filterBP='escanteio'; filterLado='all'; render();
+  const imgDefEsc = await captureFull();
+
+  filterShow='defensivo'; filterBP='faltaIndireta'; filterLado='all'; render();
+  const imgDefFal = await captureFull();
+
+
+  // ===== CAPTURAR HEATMAPS CANVAS-ONLY =====
+  heatmapOn = true;
+
+  // 1) GERAL
+  filterShow='both'; filterBP='all'; filterLado='all'; render();
+  const hGeral = await captureCanvas();
+
+  // 2) OFENSIVO
+  filterShow='ofensivo'; filterBP='all'; filterLado='all'; render();
+  const hOf = await captureCanvas();
+
+  // 3) DEFENSIVO
+  filterShow='defensivo'; filterBP='all'; filterLado='all'; render();
+  const hDef = await captureCanvas();
+
+  // RESTAURAR TELA ORIGINAL
+  restoreState();
+
+  // =========================
+  // MONTAR PDF
+  // =========================
   const pdf = new jsPDF({
     unit: "px",
     format: [a2WidthPx, a2HeightPx],
     orientation: "portrait"
   });
 
-  // ajustar imagem dentro do A2 mantendo proporção
-  const imgRatio = canvas.width / canvas.height;
-  const pageRatio = a2WidthPx / a2HeightPx;
+  async function addPage(imgData, index, titulo){
+    const img = new Image();
+    return new Promise(resolve=>{
+      img.onload = ()=>{
+        const imgRatio = img.width / img.height;
+        const pageRatio = a2WidthPx / a2HeightPx;
+        let w,h;
 
-  let renderWidth, renderHeight;
+        if(imgRatio > pageRatio){
+          w = a2WidthPx;
+          h = a2WidthPx / imgRatio;
+        } else {
+          h = a2HeightPx * 0.88;
+          w = h * imgRatio;
+        }
 
-  if (imgRatio > pageRatio) {
-    renderWidth = a2WidthPx;
-    renderHeight = a2WidthPx / imgRatio;
-  } else {
-    renderHeight = a2HeightPx;
-    renderWidth = a2HeightPx * imgRatio;
+        if(index > 0) pdf.addPage();
+
+        pdf.setFontSize(32);
+        pdf.setFont("helvetica", "bold");
+        pdf.text(titulo, a2WidthPx / 2, 60, { align: "center" });
+
+        pdf.addImage(
+          imgData,
+          "JPEG",
+          (a2WidthPx - w) / 2,
+          120,
+          w,
+          h
+        );
+
+        resolve();
+      };
+      img.src = imgData;
+    });
   }
 
-  pdf.addImage(
-    imgData,
-    "JPEG",
-    (a2WidthPx - renderWidth) / 2,
-    (a2HeightPx - renderHeight) / 2,
-    renderWidth,
-    renderHeight
-  );
+  // PÁGINAS NORMAIS
+  await addPage(imgGeral,   0, "GERAL");
+  await addPage(imgOffEsc,  1, "OFENSIVO — ESCANTEIO");
+  await addPage(imgOffFal,  2, "OFENSIVO — FALTA INDIRETA");
+  await addPage(imgDefEsc,  3, "DEFENSIVO — ESCANTEIO");
+  await addPage(imgDefFal,  4, "DEFENSIVO — FALTA INDIRETA");
 
-  pdf.save("Marcador.pdf");
+  // ===== PÁGINA EXTRA HEATMAP =====
+  pdf.addPage();
+
+  const heatImgs = [
+    {title:"GERAL", img:hGeral},
+    {title:"OFENSIVO", img:hOf},
+    {title:"DEFENSIVO", img:hDef}
+  ];
+
+  pdf.setFontSize(28);
+  pdf.setFont("helvetica", "bold");
+  pdf.text("HEATMAP — ÁREAS DE CONCENTRAÇÃO", a2WidthPx/2, 50, {align:"center"});
+
+  const blockWidth = a2WidthPx / 3;
+  const imgWidth = blockWidth * 0.85;
+  const imgHeight = imgWidth * 0.5;
+
+  heatImgs.forEach((obj,idx)=>{
+    const x = blockWidth * idx + (blockWidth - imgWidth)/2;
+    const y = 140;
+
+    pdf.setFontSize(22);
+    pdf.text(obj.title, x + imgWidth/2, y - 10, {align:"center"});
+
+    pdf.addImage(obj.img, "PNG", x, y, imgWidth, imgHeight);
+  });
+
+  pdf.save("Analise_Bolas_Paradas.pdf");
 };
+
+
+const overlayHelp = document.getElementById("overlayHelp");
+const btnHelp = document.getElementById("btnHelp");
+const btnHelpClose = document.getElementById("btnHelpClose");
+
+// abre modal
+btnHelp.onclick = () => {
+  overlayHelp.style.display = "flex";
+};
+
+// fecha modal
+btnHelpClose.onclick = () => {
+  overlayHelp.style.display = "none";
+};
+
+overlayHelp.onclick = (e)=>{
+  if(e.target === overlayHelp){
+    overlayHelp.style.display = "none";
+  }
+};
+
+// ===== FIRST-TIME HELP MODAL USING LOCALSTORAGE =====
+(function(){
+  const LS_KEY = "bp_help_seen_v1";
+
+  // se nunca viu, abre e grava
+  if(!localStorage.getItem(LS_KEY)){
+    overlayHelp.style.display = "flex";
+    localStorage.setItem(LS_KEY, "1");
+  }
+})();
+
+
+
 
 
   </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+
 
   </body>
   </html>
