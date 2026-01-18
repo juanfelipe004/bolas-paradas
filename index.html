@@ -3,10 +3,20 @@
   <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="icon" href="bahia.png" type="png">
-  <link rel="apple-touch-icon" href="bahia.png">
+  <link rel="icon" href="/bahia.png" type="png">
+  <link rel="apple-touch-icon" href="/bahia.png">
   <title>Marcador de Bolas Paradas</title>
   <style>
+
+    #appFooter {
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 20px;
+  user-select: none;
+}
  /* ================================
    FONTE / TEMA BAHIA MODERNO
 =============================== */
@@ -2752,9 +2762,17 @@ overlayHelp.onclick = (e)=>{
 
 
 
+
   </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<footer id="appFooter">
+  © 2026<span id="footerYear"></span> — Desenvolvido por 
+  <a href="https://www.instagram.com/felipeerabelo_?igsh=Y281aGMxN2Y0am8=" target="_blank" style="text-decoration:none; color:inherit;">
+    Felipe Rabelo
+  </a>
+</footer>
 
 
 
