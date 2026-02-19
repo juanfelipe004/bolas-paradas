@@ -533,6 +533,8 @@ button:focus:not(:focus-visible) {
   ">
 
     <!-- MAPA (GRUDADO ESQUERDA) -->
+
+    
     <div id="mapColumn" style="flex:0 0 auto; margin-right:15px; margin-top: 45px;">
       <canvas id="canvas" width="1200" height="600"></canvas>
     </div>
@@ -782,12 +784,79 @@ let filterJogadores = new Set();
   }
 
 
-  /* ======== HEATMAP REGIONS ======== */
-  const HEAT_REGIONS=[
-    {name:"primeiro",x1:253,x2:361,y1:40,y2:150},
-    {name:"zona",x1:362,x2:465,y1:40,y2:150},
-    {name:"segundo",x1:466,x2:588,y1:40,y2:150}
-  ];
+function getNearestZone(point, zones){
+  let nearest = null;
+  let minDist = Infinity;
+
+  zones.forEach(z => {
+    const cx = (z.x1 + z.x2) / 2;
+    const cy = (z.y1 + z.y2) / 2;
+
+    const dx = point.x - cx;
+    const dy = point.y - cy;
+
+    const dist = dx * dx + dy * dy; // sem sqrt (mais rápido)
+
+    if(dist < minDist){
+      minDist = dist;
+      nearest = z;
+    }
+  });
+
+  return nearest;
+}
+
+
+
+
+
+
+const FIELD_MARGIN = 8;
+
+function buildHeatZones(cols = 10, rows = 10){
+  const zones = [];
+
+  const MARGIN_TOP = 36;
+  const MARGIN_X   = 4;
+
+  const usableWidth  = canvas.width  - (MARGIN_X * 2);
+  const usableHeight = canvas.height - MARGIN_TOP;
+
+  const w = usableWidth / cols;
+  const h = usableHeight / rows;
+
+  let id = 0;
+
+  for(let r = 0; r < rows; r++){
+    for(let c = 0; c < cols; c++){
+      zones.push({
+        id: id++,
+        x1: MARGIN_X + c * w,
+        x2: MARGIN_X + (c + 1) * w,
+        y1: MARGIN_TOP + r * h,
+        y2: MARGIN_TOP + (r + 1) * h
+      });
+    }
+  }
+
+  return zones;
+}
+
+
+
+const HEAT_ZONES = buildHeatZones();
+
+
+const FIELD = {
+  x1: 40,
+  y1: 20,
+  x2: canvas.width - 40,
+  y2: canvas.height - 20
+};
+
+
+
+
 
   /* ======== ELEMENTS ======== */
   const filterSelect=document.getElementById('filterShow');
@@ -1037,9 +1106,11 @@ let filterJogadores = new Set();
     ctx.clearRect(0,0,canvas.width,canvas.height);
     if(imgLoaded) ctx.drawImage(img,0,0);
 
-    if(heatmapOn) drawHeatmap();  // 1 - heatmap
-    drawPoints();                 // 2 - pontos
-    if(heatmapOn) drawHeatmapText(); // 3 - texto sempre por cima
+    if(heatmapOn){
+  drawHeatmap();
+} else {
+  drawPoints();
+}
 
     updateUI();
     renderGoalView();
@@ -1118,31 +1189,52 @@ let filterJogadores = new Set();
   }
 
   /* HEATMAP — corrigido */
-  function drawHeatmap(){
-    // pega só pontos visíveis (já filtrados pelos filtros internos)
-    const vis = points.filter(p=>{
-      if(filterShow==='ofensivo' && p.situacao!=='ofensiva') return false;
-      if(filterShow==='defensivo' && p.situacao!=='defensiva') return false;
-      if(filterBP!=='all' && p.tipoBP!==filterBP) return false;
-      if(filterLado!=='all' && p.lado!==filterLado) return false;
-      if(!passesStatFilters(p)) return false;
-      return true;
-    });
+ function drawHeatmap(){
+  const vis = getVisiblePoints();
+  if(vis.length === 0) return;
 
-    const counts = HEAT_REGIONS.map(r=>({
-      r,
-      count: vis.filter(p=>p.x>=r.x1 && p.x<=r.x2 && p.y>=r.y1 && p.y<=r.y2).length
-    }));
+  // mapa de contagem por zona
+  const zoneCounts = new Map();
+  HEAT_ZONES.forEach(z => zoneCounts.set(z.id, 0));
 
-    const max = Math.max(...counts.map(c=>c.count));
+  // atribuição: dentro da zona OU zona mais próxima
+  vis.forEach(p => {
+    let zone = HEAT_ZONES.find(z =>
+      p.x >= z.x1 && p.x <= z.x2 &&
+      p.y >= z.y1 && p.y <= z.y2
+    );
 
-    counts.forEach(({r,count})=>{
-      if(count === 0) return;
-      const a = (count/max)*0.8 + 0.1; // intensidade
-      ctx.fillStyle=`rgba(0,80,200,${a})`;
-      ctx.fillRect(r.x1,r.y1,r.x2-r.x1,r.y2-r.y1);
-    });
-  }
+    if(!zone){
+      zone = getNearestZone(p, HEAT_ZONES);
+    }
+
+    zoneCounts.set(zone.id, zoneCounts.get(zone.id) + 1);
+  });
+
+  const total = vis.length;
+
+  // desenho
+  HEAT_ZONES.forEach(z => {
+    const count = zoneCounts.get(z.id);
+    if(count === 0) return;
+
+    const pct = (count / total) * 100;
+
+    const alpha = Math.min(0.8, pct / 25);
+    ctx.fillStyle = `rgba(200,0,0,${alpha})`;
+    ctx.fillRect(z.x1, z.y1, z.x2 - z.x1, z.y2 - z.y1);
+
+    ctx.fillStyle = "#000";
+    ctx.font = "bold 14px Inter";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(
+      `${pct.toFixed(1)}%`,
+      (z.x1 + z.x2) / 2,
+      (z.y1 + z.y2) / 2
+    );
+  });
+}
 
   /* DRAW */
  function drawPoints(){
