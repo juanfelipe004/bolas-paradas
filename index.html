@@ -1,4 +1,4 @@
-  <!doctype html>
+<!doctype html>
   <html lang="pt-BR">
   <head>
   <meta charset="utf-8" />
@@ -27,32 +27,33 @@
 
 :root {
   --white: #ffffff;
-  --bg: #EEF2F7;
+  --bg: #F5F6F7;
   --panel: #ffffff;
-  --panel-soft: #F7F9FC;
+  --panel-soft: #FAFAFB;
 
-  --border: #D3DAE4;
-  --border-dark: #B3BBC8;
-  --border-strong: #8A93A3;
+  --border: #E4E6EA;
+  --border-dark: #CBCED4;
+  --border-strong: #9AA0AA;
 
-  --text: #1D1E22;
-  --text-secondary: #5D6472;
+  --text: #1E2227;
+  --text-secondary: #6B7178;
 
-  --primary: #002A6E;
-  --primary-dark: #001C49;
-  --primary-soft: #E3ECFF;
+  --primary: #2B2F33;
+  --primary-dark: #16181B;
+  --primary-soft: #EEF0EF;
 
-  --accent: #E10600;
-  --success: #16A34A;
-  --warn: #D61B1B;
+  --accent: #1F6F4F;
+  --accent-soft: #E7F1EC;
+  --success: #1F6F4F;
+  --warn: #B3261E;
 
-  --hover: #F1F4FB;
-  --focus: #D6E3FF;
+  --hover: #F0F1F2;
+  --focus: #DDE7E2;
 
   --radius: 8px;
-  --radius-lg: 10px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.10);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px rgba(16,24,40,0.06);
+  --shadow-md: 0 8px 20px rgba(16,24,40,0.08);
 
   --transition: .22s cubic-bezier(.22,.61,.36,1);
 
@@ -83,21 +84,20 @@ body {
 #brandBar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: var(--space-12) 0 var(--space-8) 0;
+  gap: 14px;
+  padding: 4px 4px var(--space-16) 4px;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 12px;
+  margin-bottom: var(--space-16);
 }
 
 #brandLogo {
-  width: 60px;
-  height: 60px;
+  width: 44px;
+  height: 44px;
   background-image: url('logo.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.16));
+  border-radius: var(--radius);
 }
 
 #brandInfo {
@@ -108,13 +108,14 @@ body {
 }
 
 #brandTitle {
-  font-weight: 600;
-  font-size: 19px;
-  color: var(--primary-dark);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -.01em;
+  color: var(--text);
 }
 
 #brandSub {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--text-secondary);
 }
 
@@ -140,6 +141,65 @@ h4 {
   margin: 0 0 6px 0;
   color: var(--primary-dark);
   font-weight: 600;
+  position: relative;
+  padding-bottom: 6px;
+}
+h4::after {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 3px;
+  background: var(--accent);
+  margin: 6px auto 0;
+  border-radius: 2px;
+}
+
+/* ================================
+   FLUXO ORIGEM -> ALVO
+=============================== */
+#clickStageBadge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  border: 1px solid var(--primary);
+  display: none;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+#clickStageBadge.active { display: inline-flex; }
+#clickStageBadge .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+  animation: pulseDot 1s infinite;
+}
+@keyframes pulseDot { 0%{opacity:1;} 50%{opacity:.3;} 100%{opacity:1;} }
+
+#mapColumn { position: relative; }
+#mapHint {
+  position: absolute;
+  top: 8px; left: 8px;
+  background: rgba(43,47,51,0.92);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: none;
+  pointer-events: none;
+  box-shadow: var(--shadow-sm);
+  z-index: 5;
+}
+
+#modalCoordsInfo {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 8px 12px 0 12px;
+  font-weight: 500;
 }
 
 /* ================================
@@ -147,14 +207,53 @@ h4 {
 =============================== */
 .toolbar {
   display: flex;
+  align-items: center;
   gap: var(--space-8);
   flex-wrap: wrap;
   margin-bottom: var(--space-16);
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: var(--space-12);
+  padding: 10px var(--space-12);
   box-shadow: var(--shadow-sm);
+}
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.toolbar-divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--border);
+  margin: 0 4px;
+}
+.toolbar-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  margin-right: 2px;
+  white-space: nowrap;
+}
+.toolbar .btn-ghost {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border-dark);
+  font-weight: 500;
+  padding: 7px 11px;
+  font-size: 12.5px;
+}
+.toolbar .btn-ghost:hover {
+  background: var(--hover);
+  transform: none;
+  box-shadow: none;
+}
+.toolbar select {
+  font-size: 12.5px;
+  padding: 7px 10px;
 }
 
 /* ================================
@@ -260,6 +359,15 @@ button:focus:not(:focus-visible) {
   height: 164px;
 }
 
+/* container "inset" dentro de um .panel externo (canvas, rankings, decisão) */
+.panel-inset {
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-8);
+}
+.panel-inset.panel2 { display: flex; align-items: center; justify-content: center; }
+
 /* imagens internas */
 .panel img {
   width: 100%;
@@ -312,7 +420,7 @@ button:focus:not(:focus-visible) {
 }
 
 /* ================================
-   STATS GRID
+   STATS GRID (DASHBOARD ANALÍTICO)
 =============================== */
 .stats-grid {
   display: grid;
@@ -331,35 +439,378 @@ button:focus:not(:focus-visible) {
 }
 
 .stats-block {
-  background: linear-gradient(180deg, var(--panel), var(--panel-soft));
-  padding: var(--space-12);
+  background: var(--panel);
+  padding: var(--space-12) var(--space-12) var(--space-8);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  white-space: pre-line;
-  line-height: 1.4;
   transition: var(--transition);
 }
 .stats-block:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  border-color: var(--border-dark);
+}
+.stats-block b {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
 }
 
-/* check stats */
-.stat-line {
+/* linha de estatística: rótulo + valor/% + barra de progresso discreta */
+.stat-row {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
-  padding: 2px 0;
+  gap: 0 8px;
+  padding: 5px 4px;
+  margin: 0 -4px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
 }
-.stat-text {
-  line-height: 18px;
-}
-.stat-check {
-  width: 16px;
-  height: 16px;
+.stat-row:hover { background: var(--hover); }
+.stat-row.is-active { background: var(--primary-soft); }
+
+.stat-row .stat-check {
+  width: 14px;
+  height: 14px;
   cursor: pointer;
   accent-color: var(--primary);
+  flex: 0 0 auto;
+}
+.stat-row-main {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  min-width: 0;
+  gap: 8px;
+  font-size: 12.5px;
+}
+.stat-row-label {
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stat-row-value {
+  font-weight: 700;
+  color: var(--primary);
+  white-space: nowrap;
+}
+.stat-row-pct {
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 11px;
+  margin-left: 4px;
+}
+.stat-bar {
+  flex-basis: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--panel-soft);
+  overflow: hidden;
+  margin-left: 22px;
+}
+.stat-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  border-radius: 2px;
+  transition: width .3s ease;
+}
+
+/* ================================
+   LEGENDA COMPACTA (chips horizontais, acima do mapa)
+=============================== */
+.legend-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px 16px;
+}
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.legend-swatch {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.legend-symbol {
+  width: auto;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1;
+  color: #1A1A1A;
+  flex: 0 0 auto;
+}
+.legend-divider {
+  width: 1px;
+  height: 14px;
+  background: var(--border);
+}
+
+/* ================================
+   DASHBOARD GRID (layout principal)
+=============================== */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.1fr) minmax(250px, 1fr) minmax(250px, 1fr);
+  gap: var(--space-16);
+  align-items: start;
+}
+@media (max-width: 1300px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
+
+.map-panel { padding: var(--space-16); }
+.map-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: var(--space-12);
+  padding-bottom: var(--space-12);
+  border-bottom: 1px solid var(--border);
+}
+.map-panel-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  text-align: left;
+  padding-bottom: 0;
+}
+.map-panel-title::after { display: none; }
+
+.map-canvas-wrap { position: relative; display: flex; justify-content: center; }
+
+.support-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.insight-panel { display: flex; flex-direction: column; }
+
+.rankings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  margin-top: var(--space-16);
+}
+@media (max-width: 900px) {
+  .rankings-grid { grid-template-columns: 1fr; }
+}
+
+.stats-section { margin-top: var(--space-16); }
+
+/* ================================
+   DASHBOARD ANALÍTICO (item 5-8)
+=============================== */
+.analytics-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-12);
+}
+.analytics-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+.analytics-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-12);
+  margin-bottom: var(--space-16);
+}
+.kpi-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-12) var(--space-16);
+  box-shadow: var(--shadow-sm);
+}
+.kpi-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.kpi-value .kpi-unit { font-size: 14px; font-weight: 600; color: var(--text-secondary); margin-left: 2px; }
+.kpi-sub { font-size: 11.5px; color: var(--text-secondary); margin-top: 4px; }
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-16);
+  margin-bottom: var(--space-16);
+}
+.chart-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-12) var(--space-16);
+  box-shadow: var(--shadow-sm);
+}
+.chart-card-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.chart-card canvas { max-height: 220px; }
+
+.mini-bars { display: flex; flex-direction: column; gap: 8px; }
+.mini-bar-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.mini-bar-label { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini-bar-track {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--panel-soft);
+  overflow: hidden;
+}
+.mini-bar-fill { display: block; height: 100%; border-radius: 4px; transition: width .3s ease; }
+.mini-bar-value { font-weight: 700; color: var(--text); text-align: right; min-width: 28px; }
+.chart-card.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 12px;
+  min-height: 120px;
+}
+
+.insights-card {
+  background: var(--primary-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-16);
+}
+.insights-card .chart-card-title { color: var(--primary-dark); }
+.insights-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px 20px;
+}
+.insights-list li {
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.45;
+  padding-left: 16px;
+  position: relative;
+}
+.insights-list li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+.insights-list b { color: var(--primary-dark); }
+
+/* ================================
+   BADGE / PAINEL DE FILTROS
+=============================== */
+.filters-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  margin-left: 6px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.filters-modal { width: 720px; max-width: 94vw; }
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-16);
+  padding: var(--space-16);
+  max-height: 65vh;
+  overflow-y: auto;
+}
+@media (max-width: 720px) {
+  .filters-grid { grid-template-columns: 1fr; }
+}
+.filter-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.filter-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border-dark);
+  background: var(--panel);
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+}
+.filter-chip:hover { background: var(--hover); }
+.filter-chip.is-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+.filter-chip .chip-count {
+  font-size: 10.5px;
+  opacity: .75;
 }
 
 /* ================================
@@ -452,10 +903,6 @@ button:focus:not(:focus-visible) {
 /* ================================
    RESPONSIVO
 =============================== */
-@media (max-width: 1080px) {
-  #layoutRow { flex-direction: column; }
-  #rightColumn { flex-direction: column; }
-}
 @media (max-width: 720px) {
   .toolbar { padding: var(--space-8); }
 }
@@ -476,138 +923,136 @@ button:focus:not(:focus-visible) {
 
 
   <div class="toolbar">
-    <button id="btnClear">Limpar pontos</button>
-    <button id="btnUndo">Desfazer</button>
-    <button id="btnExportCSV">Exportar CSV</button>
-    <button id="btnExportPNG">Exportar PNG</button>
-    <button id="btnExportPDF">Exportar PDF</button>
-    <label for="importCSV" style="padding:10px 10px; background:#0077cc; color:white; cursor:pointer; border-radius:4px; font-size:13px;">
-      CSV IMPORT
-    </label>
-    <input type="file" id="importCSV" accept=".csv" multiple style="display:none;" />
-  <button id="btnClearStatsFilters">Limpar filtros</button>
+    <div class="toolbar-group">
+      <span class="toolbar-label">Dados</span>
+      <button id="btnClear" class="btn-ghost">Limpar pontos</button>
+      <button id="btnUndo" class="btn-ghost">Desfazer</button>
+      <button id="btnExportCSV" class="btn-ghost">Exportar CSV</button>
+      <button id="btnExportPNG" class="btn-ghost">Exportar PNG</button>
+      <button id="btnExportPDF" class="btn-ghost">Exportar PDF</button>
+      <label for="importCSV" class="btn-ghost" style="cursor:pointer; display:inline-flex; align-items:center;">
+        CSV Import
+      </label>
+      <input type="file" id="importCSV" accept=".csv" multiple style="display:none;" />
+    </div>
 
+    <div class="toolbar-divider"></div>
 
+    <div class="toolbar-group">
+      <span class="toolbar-label">Visualização</span>
+      <button id="btnHeatmapToggle" class="btn-ghost">Heatmap: OFF</button>
+      <button id="btnOpenFilters" class="btn-ghost">Filtros<span id="filtersActiveBadge" class="filters-badge" style="display:none;">0</span></button>
+      <button id="btnClearStatsFilters" class="btn-ghost">Limpar filtros</button>
+    </div>
 
-    <div style="margin-left:12px;">
-      <button id="btnHeatmapToggle">Heatmap: OFF</button>
-      <label style="margin-left:8px;">Mostrar: </label>
+    <div class="toolbar-divider"></div>
+
+    <div class="toolbar-group">
+      <span class="toolbar-label">Mostrar</span>
       <select id="filterShow">
         <option value="both">Ambos</option>
         <option value="ofensivo">Apenas ofensivos</option>
         <option value="defensivo">Apenas defensivos</option>
       </select>
 
-      <!-- FILTRO NOVO BP -->
-      <label style="margin-left:8px;">BP:</label>
+      <span class="toolbar-label" style="margin-left:6px;">BP</span>
       <select id="filterBP">
         <option value="all">Todos</option>
         <option value="escanteio">Escanteio</option>
         <option value="faltaIndireta">Falta indireta</option>
       </select>
+
+      <span class="toolbar-label" style="margin-left:6px;">Lado</span>
+      <select id="filterLado">
+        <option value="all">Todos</option>
+        <option value="direito">Direito</option>
+        <option value="esquerdo">Esquerdo</option>
+        <option value="central">Central</option>
+      </select>
+
+      <span class="toolbar-label" style="margin-left:6px;">Mapa</span>
+      <select id="filterMapView">
+        <option value="all">Cobranças + Finalizações</option>
+        <option value="cobranca">Apenas cobranças</option>
+      </select>
     </div>
-    <label style="margin-left:8px; margin-top: 9px;">Lado:</label>
-  <select id="filterLado">
-    <option value="all">Todos</option>
-    <option value="direito">Direito</option>
-    <option value="esquerdo">Esquerdo</option>
-    <option value="central">Central</option>
-  </select>
-  <button id="btnHelp" style="margin-left:auto; background-color: red;">Manual</button>
+
+    <span id="clickStageBadge"><span class="dot"></span><span id="clickStageText"></span></span>
+
+    <button id="btnHelp" class="btn-ghost" style="margin-left:auto;">Manual</button>
 
   </div>
   
 
 
-  <div style="display:flex; gap:16px; align-items:flex-start;">
+  <div class="dashboard-grid">
 
-    <!-- MAPA -->
-    <div id="mapContainer" style="flex:1; display:flex; justify-content:center;">
-      
-    </div>
-
-    <div id="layoutRow" style="
-    display:flex;
-    align-items:flex-start;
-    width:100%;
-  ">
-
-    <!-- MAPA (GRUDADO ESQUERDA) -->
-
-    
-    <div id="mapColumn" style="flex:0 0 auto; margin-right:15px; margin-top: 45px;">
-      <canvas id="canvas" width="1200" height="600"></canvas>
-    </div>
-
-    <!-- AREA DIREITA (FLEXIBLE) -->
-    <div id="rightColumn" style="
-    display:grid;
-    grid-template-columns: 260px 260px;
-    grid-template-rows: auto auto;
-    gap:15px;
-    margin-top: 20px;
-  ">
-  <!-- LEGENDA (COLADA) -->
-      <div style="width:260px;">
-        <h4>Legenda</h4>
-        <div class="panel">
-          <div><span class="swatch" style="background:#0033aa"></span> Azul escuro = viajada</div>
-    <div><span class="swatch" style="background:#cc0000"></span> Vermelho = rápida</div>
-    <div><span class="swatch" style="background:#ffcc00"></span> Amarelo = curta</div>
-    <div>⭐ Gol</div>
-    <div>● Sem gol</div>
-    <div>⚠️ Chance clara</div>
-    <div style="display:flex; align-items:center; gap:6px;">
-        <div style="width:14px;height:14px;border:2px solid #000;border-radius:50%;"></div>
-        Contorno preto = finalizou
-    </div>
-    <div>Letras D/E/C indicam lado da cobrança</div>
+    <!-- MAPA PRINCIPAL (elemento de maior destaque) -->
+    <section class="panel map-panel">
+      <div class="map-panel-header">
+        <h4 class="map-panel-title">Mapa das Cobranças</h4>
+        <div class="legend-inline">
+          <span class="legend-chip"><span class="legend-swatch" style="background:#2E5F8A"></span>Viajada</span>
+          <span class="legend-chip"><span class="legend-swatch" style="background:#B8473F"></span>Rápida</span>
+          <span class="legend-chip"><span class="legend-swatch" style="background:#D9A441"></span>Curta</span>
+          <span class="legend-divider"></span>
+          <span class="legend-chip"><span class="legend-symbol">○</span>Remate</span>
+          <span class="legend-chip"><span class="legend-symbol">□</span>Cabeça</span>
+          <span class="legend-chip"><span class="legend-symbol">◇</span>Livre direto</span>
+          <span class="legend-chip"><span class="legend-symbol">●</span>Gol</span>
         </div>
       </div>
-      <!-- FINALIZAÇÃO (COLADA) -->
-  <div style="width:260px;">
-    <h4>Finalização no gol</h4>
-  <div class="panel panel2">
-    <canvas id="goalViewCanvas" width="240" height="150"></canvas>
+      <div id="mapColumn" class="map-canvas-wrap">
+        <div id="mapHint"></div>
+        <canvas id="canvas" width="1200" height="600"></canvas>
+      </div>
+    </section>
+
+    <!-- COLUNA DE APOIO: gol + mapa das finalizações -->
+    <div class="support-col">
+      <section class="panel">
+        <h4>Finalização no gol</h4>
+        <div class="panel-inset panel2">
+          <canvas id="goalViewCanvas" width="240" height="150"></canvas>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h4>Mapa das Finalizações</h4>
+        <div class="panel-inset panel2">
+          <canvas id="finalizacoesMapCanvas" width="240" height="150"></canvas>
+        </div>
+      </section>
+    </div>
+
+    <!-- INSIGHTS / TOMADA DE DECISÃO -->
+    <section class="panel insight-panel">
+      <h4>Tomada de Decisão</h4>
+      <div id="decisionPanel" class="scroll-card" style="max-height:450px;">
+        Carregando análises...
+      </div>
+    </section>
+
   </div>
-  </div>
-  <!-- COBRADORES -->
-    <div>
+
+  <!-- RANKINGS -->
+  <div class="rankings-grid">
+    <section class="panel">
       <h4>Cobradores</h4>
-      <div id="cobradoresCard" class="panel scroll-card"></div>
-    </div>
+      <div id="cobradoresCard" class="panel-inset scroll-card"></div>
+    </section>
 
-    <!-- JOGADORES -->
-    <div>
+    <section class="panel">
       <h4>Jogadores</h4>
-      <div id="jogadoresCard" class="panel scroll-card"></div>
-    </div>
-    </div>
-
-<div style="margin-top:20px; width:25%; margin-left: 10px;">
-  <h4 style="margin:0; text-align:center;">Tomada de Decisão</h4>
-
-  <div id="decisionPanel"
-       class="panel"
-       style="max-height:450px; overflow:auto; margin-top:10px;">
-    Carregando análises...
-  </div>
-</div>
-
-
-
-
-
-    
+      <div id="jogadoresCard" class="panel-inset scroll-card"></div>
+    </section>
   </div>
 
-
-  </div>
-
-  <!-- ESTATÍSTICAS EMBAIXO -->
-  <div style="margin-top:20px;">
+  <!-- DASHBOARD ESTATÍSTICO -->
+  <div class="stats-section">
     <div id="statsPanel" class="panel muted">Nenhum dado</div>
   </div>
+
 
 
   <!-- MODAL -->
@@ -621,6 +1066,8 @@ button:focus:not(:focus-visible) {
         <div class="tab" data-tab="tab-resultado">Resultado</div>
         <div class="tab" data-tab="tab-avanc">Falha</div>
       </div>
+
+      <div id="modalCoordsInfo"></div>
 
       <div id="tab-geral" class="tab-content active">
 
@@ -702,8 +1149,17 @@ button:focus:not(:focus-visible) {
         <div class="row"><label>Resultado:</label>
           <select id="resultadoJogada"><option value="">—</option><option value="gol">Gol</option><option value="contraAtaque">Contra-ataque</option><option value="fora">Finalização para fora</option><option value="noGol">Finalização no gol</option><option value="bloqueada">Bloqueada</option><option value="corte">Corte</option><option value="nada">Nada</option></select>
         </div>
+
+        <div id="finalizacaoCampoWrapper" style="margin-top:14px; display:none;">
+    <label><b>Local da finalização no campo</b></label>
+    <div style="font-size:12px; color:var(--text-secondary); margin:2px 0 6px;">Clique no local onde o jogador finalizou (pequena área, entrada da área, 2ª bola, etc.)</div>
+    <canvas id="finalizacaoCampoCanvas" width="300" height="150"
+            style="border:1px solid #ccc; border-radius:6px; cursor:pointer;">
+    </canvas>
+  </div>
+
         <div id="goalEditWrapper" style="margin-top:14px; display:none;">
-    <label><b>Local da finalização</b></label>
+    <label><b>Local da finalização no gol</b></label>
     <canvas id="goalEditCanvas" width="240" height="160"
             style="margin-top:6px; border:1px solid #ccc; border-radius:6px;">
     </canvas>
@@ -737,12 +1193,7 @@ button:focus:not(:focus-visible) {
 
   <script>
   /* ======== CORE STATE ======== */
-  const COLORS={viajada:"#0033aa",rapida:"#cc0000",curta:"#ffcc00"};
-  const CLARA_COLORS = {
-    viajada: "#0033aa",
-    rapida: "#e74c3c",    
-    curta: "#f1c40f"      
-  };
+  const COLORS={viajada:"#2E5F8A",rapida:"#B8473F",curta:"#D9A441"};
 
 
 
@@ -750,12 +1201,20 @@ button:focus:not(:focus-visible) {
   const ctx=canvas.getContext('2d');
   let img=new Image(), imgLoaded=false;
   let points=[];
-  let pendingClick=null;
+  let pendingClick=null;   // ALVO da cobrança (compatível com o campo x/y já existente)
+  let pendingOrigin=null;  // ORIGEM da cobrança confirmada, aguardando salvar no modal
   let editingIndex=null;
   let heatmapOn=false;
+
+  // === NOVO FLUXO ORIGEM -> ALVO ===
+  // 'idle'          => próximo clique define a ORIGEM (ou edita um ponto existente)
+  // 'awaitingTarget'=> próximo clique define o ALVO
+  let clickStage='idle';
+  let tempOrigin=null;
   let filterShow='both';
   let filterBP='all'; // NOVO
   let filterLado='all';
+  let filterMapView='all'; // 'all' | 'cobranca' | 'finalizacao'
   
 
   // === NOVOS FILTROS DP ===
@@ -866,10 +1325,45 @@ const FIELD = {
   const btnUndo=document.getElementById('btnUndo');
   const btnExportCSV=document.getElementById('btnExportCSV');
   const btnExportPNG=document.getElementById('btnExportPNG');
-  const pointsList=document.getElementById('pointsList');
   const statsPanel=document.getElementById('statsPanel');
+  const filtersActiveBadge=document.getElementById('filtersActiveBadge');
+  const btnOpenFilters=document.getElementById('btnOpenFilters');
   const overlay=document.getElementById('overlay');
   const filterLadoSelect=document.getElementById('filterLado');
+  const filterMapViewSelect=document.getElementById('filterMapView');
+  const clickStageBadge=document.getElementById('clickStageBadge');
+  const clickStageText=document.getElementById('clickStageText');
+  const mapHint=document.getElementById('mapHint');
+  const modalCoordsInfo=document.getElementById('modalCoordsInfo');
+
+  /* Atualiza indicadores visuais da etapa atual (origem/alvo) */
+  function updateClickStageUI(){
+    if(clickStage === 'awaitingTarget'){
+      clickStageBadge.classList.add('active');
+      clickStageText.textContent = 'Etapa 2/2 — clique no ALVO da cobrança';
+      mapHint.style.display = 'block';
+      mapHint.textContent = '2/2 — Clique no ALVO da cobrança (Esc para cancelar)';
+    } else {
+      clickStageBadge.classList.remove('active');
+      mapHint.style.display = 'none';
+    }
+  }
+
+  /* Mostra Origem/Alvo no cabeçalho do modal */
+  function updateModalCoordsInfo(origem, alvo){
+    const fmt = p => p ? `(${Math.round(p.x)}, ${Math.round(p.y)})` : '—';
+    modalCoordsInfo.textContent = `📍 Origem: ${fmt(origem)}    →    🎯 Alvo: ${fmt(alvo)}`;
+  }
+
+  /* Cancela a seleção de origem em andamento (Esc) */
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && clickStage === 'awaitingTarget' && overlay.style.display !== 'flex'){
+      clickStage='idle';
+      tempOrigin=null;
+      updateClickStageUI();
+      render();
+    }
+  });
 
 
   /* MODAL FIELDS */
@@ -938,7 +1432,7 @@ const FIELD = {
     falhaSelect.value='';
   }
 
-  /* CLICK */
+  /* CLICK — fluxo em 2 etapas: 1) ORIGEM  2) ALVO (abre o modal) */
   canvas.onclick = (ev)=>{
     if(!imgLoaded) return;
 
@@ -946,6 +1440,23 @@ const FIELD = {
     const x = ev.clientX - r.left;
     const y = ev.clientY - r.top;
 
+    // ===== ETAPA 2: este clique define o ALVO da cobrança =====
+    if(clickStage === 'awaitingTarget'){
+      pendingOrigin = tempOrigin;
+      pendingClick  = { x, y };
+      tempOrigin = null;
+      clickStage = 'idle';
+      updateClickStageUI();
+      editingIndex = null;
+
+      render(); // desenha imediatamente a linha origem -> alvo
+
+      // pequena pausa para o usuário ver a trajetória antes do modal cobrir a tela
+      setTimeout(openModalCreate, 150);
+      return;
+    }
+
+    // ===== Clique em ponto já existente (edição) — usa o ALVO (x,y) =====
     const visible = getVisiblePoints(); // 👈 só os visíveis
 
     let foundIndex = null;
@@ -962,9 +1473,13 @@ const FIELD = {
       return;
     }
 
-    editingIndex = null;
-    pendingClick = { x, y };
-    openModalCreate();
+    // ===== ETAPA 1: este clique define a ORIGEM da cobrança =====
+    tempOrigin = { x, y };
+    pendingClick = null;
+    pendingOrigin = null;
+    clickStage = 'awaitingTarget';
+    updateClickStageUI();
+    render();
   };
 
   function openModalCreate(){
@@ -973,12 +1488,18 @@ const FIELD = {
     // 🔴 LINHA CRÍTICA — RESETA O RESULTADO CORRETAMENTE
     updateResultadoOptions();
 
+    updateModalCoordsInfo(pendingOrigin, pendingClick);
+
     deletePoint.style.display='none';
     overlay.style.display='flex';
     resetTabsState();
     tempGoalPoint = null;
     renderGoalEdit();
     goalEditWrapper.style.display = 'none';
+
+    tempFinalizacaoCampo = null;
+    finalizacaoCampoWrapper.style.display = 'none';
+    renderFinalizacaoCampoEdit();
   }
 
   function openModalEdit(i){
@@ -1005,11 +1526,21 @@ const FIELD = {
     finalForaArea.checked=p.finalForaArea;
     resultadoJogada.value=p.resultadoJogada||'';
     falhaSelect.value=p.falha||'';
+    updateModalCoordsInfo(
+      (p.origemX != null && p.origemY != null) ? {x:p.origemX, y:p.origemY} : null,
+      {x:p.x, y:p.y}
+    );
+
     tempGoalPoint = points[i].goalPoint || null;  
     goalEditWrapper.style.display =
     (points[i].resultadoJogada === 'gol' || points[i].resultadoJogada === 'noGol')
       ? 'block'
       : 'none';
+
+    tempFinalizacaoCampo = (p.finalizacaoCampoX != null && p.finalizacaoCampoY != null)
+      ? { x: p.finalizacaoCampoX, y: p.finalizacaoCampoY }
+      : null;
+    finalizacaoCampoWrapper.style.display = p.finalizou ? 'block' : 'none';
 
     deletePoint.style.display='inline-block';
     overlay.style.display='flex';
@@ -1017,17 +1548,46 @@ const FIELD = {
     const ativo = p.resultadoJogada === 'gol' || p.resultadoJogada === 'noGol';
   goalEditWrapper.style.display = ativo ? 'block' : 'none';
   renderGoalEdit();
+  renderFinalizacaoCampoEdit();
 
 
   }
 
-  cancelModal.onclick=()=>{overlay.style.display='none';pendingClick=null;editingIndex=null;tempGoalPoint = null;};
-  deletePoint.onclick=()=>{ if(editingIndex!==null){points.splice(editingIndex,1);render();} overlay.style.display='none'; };
+  cancelModal.onclick=()=>{
+    overlay.style.display='none';
+    pendingClick=null;
+    pendingOrigin=null;
+    editingIndex=null;
+    tempGoalPoint = null;
+    tempFinalizacaoCampo = null;
+    render(); // remove eventual prévia de trajetória ainda não salva
+  };
+  deletePoint.onclick=()=>{
+    if(editingIndex!==null){points.splice(editingIndex,1);render();}
+    pendingClick=null;
+    pendingOrigin=null;
+    tempFinalizacaoCampo=null;
+    overlay.style.display='none';
+  };
 
   confirmModal.onclick = ()=>{
     const data = {
       x: pendingClick ? pendingClick.x : points[editingIndex].x,
       y: pendingClick ? pendingClick.y : points[editingIndex].y,
+
+      // ORIGEM da cobrança: se é um ponto novo, vem de pendingOrigin;
+      // se é edição, preserva a origem já salva no ponto.
+      origemX: pendingClick
+        ? (pendingOrigin ? pendingOrigin.x : null)
+        : (points[editingIndex].origemX ?? null),
+      origemY: pendingClick
+        ? (pendingOrigin ? pendingOrigin.y : null)
+        : (points[editingIndex].origemY ?? null),
+
+      // LOCAL DA FINALIZAÇÃO NO CAMPO (2ª etapa: alvo cobrança -> finalização)
+      // Independente do local da finalização no gol (goalPoint).
+      finalizacaoCampoX: finalizou.checked ? (tempFinalizacaoCampo ? tempFinalizacaoCampo.x : null) : null,
+      finalizacaoCampoY: finalizou.checked ? (tempFinalizacaoCampo ? tempFinalizacaoCampo.y : null) : null,
 
       tipoBP: tipoBP.value,
 
@@ -1063,6 +1623,12 @@ const FIELD = {
     Object.assign(points[editingIndex], data);
   }
 
+  pendingClick = null;
+  pendingOrigin = null;
+  tempOrigin = null;
+  tempFinalizacaoCampo = null;
+  clickStage = 'idle';
+  updateClickStageUI();
 
   overlay.style.display = 'none';
 
@@ -1073,10 +1639,6 @@ const FIELD = {
   console.log('GOAL:', tempGoalPoint, resultadoJogada.value);
 
   };
-
-  function drawStatsChart(){
-    // placeholder para evitar erro
-  }
 
   function getVisiblePoints(){
   return points.filter(p=>{
@@ -1112,8 +1674,23 @@ const FIELD = {
   drawPoints();
 }
 
+    // Etapa 1 em andamento: mostra a origem já clicada, aguardando o alvo
+    if(clickStage === 'awaitingTarget' && tempOrigin){
+      drawOriginMarker(ctx, tempOrigin.x, tempOrigin.y, '#2B2F33', true);
+    }
+
+    // Origem+alvo já definidos, aguardando confirmação no modal (prévia rápida)
+    if(pendingOrigin && pendingClick && overlay.style.display !== 'flex'){
+      drawTrajectory(ctx, {
+        origemX: pendingOrigin.x, origemY: pendingOrigin.y,
+        x: pendingClick.x, y: pendingClick.y,
+        cor: '#2B2F33'
+      });
+    }
+
     updateUI();
     renderGoalView();
+    renderFinalizacoesMap();
   renderPlayersCards();
     renderDecision();
 
@@ -1260,112 +1837,125 @@ const FIELD = {
       if(!p.quemFinalizou || !filterJogadores.has(p.quemFinalizou)) continue;
     }
 
-    ctx.fillStyle=p.cor;
-    ctx.strokeStyle=p.finalizou?'#000':'transparent';
-    ctx.lineWidth=2;
+    // === FILTRO "Mapa": controla apenas o MARCADOR de finalização.
+    // A seta da cobrança (origem -> alvo) é SEMPRE desenhada — nunca pode desaparecer,
+    // exista ou não finalização/gol na jogada.
+    const showFinalizacao = (filterMapView !== 'cobranca');
 
+    // ====== COBRANÇA: sempre visível — origem -> alvo, colorida pelo tipo ======
     if(p.cobFora){
       ctx.strokeStyle = "#cc0000";   // vermelho
-      ctx.lineWidth = 6;   
+      ctx.lineWidth = 6;
       ctx.beginPath();
       ctx.moveTo(p.x-10, p.y-10);
       ctx.lineTo(p.x+10, p.y+10);
       ctx.moveTo(p.x+10, p.y-10);
       ctx.lineTo(p.x-10, p.y+10);
       ctx.stroke();
-      continue;
-    }
-
-    if(p.teveGol){
-      drawStar(p.x,p.y,12);
-    } else if (p.qualidadeChance === 'clara') {
-      drawAlertTriangle(p.x, p.y, 12, CLARA_COLORS[p.tipo], p.tipo);
-      continue;
     } else {
-      drawCircle(p.x,p.y,10);
+      drawTrajectory(ctx, p); // apenas linha + seta — sem bolinhas de origem/alvo
     }
 
-    ctx.font='10px Arial';
-    ctx.fillStyle='white';
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    const letra = p.lado ? p.lado[0].toUpperCase() : '';
-    if(p.qualidadeChance !== 'clara'){
-      ctx.fillText(letra,p.x,p.y);
+    // ====== FINALIZAÇÃO: marcador preto único, estilo Opta ======
+    // Toda a análise detalhada (origem, trajetória) fica no painel "Mapa das Finalizações".
+    if(showFinalizacao && p.finalizacaoCampoX != null && p.finalizacaoCampoY != null){
+      drawFinalizacaoMarkerOpta(ctx, p.finalizacaoCampoX, p.finalizacaoCampoY, p);
     }
 
   }
 }
 
-  function drawCircle(x,y,r){
+  /* Marcador de finalização no mapa principal — estilo Opta (○ Remate, □ Remate de
+     cabeça, ● Gol). Sempre em PRETO, independente da cor/tipo da cobrança: a cor
+     fica reservada exclusivamente para a seta da cobrança. */
+  function drawFinalizacaoMarkerOpta(ctx, x, y, p){
+    const BLACK = '#1A1A1A';
+    const r = 6;
+
+    ctx.save();
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = BLACK;
+    ctx.lineWidth = 1.8;
+
+    if(p.teveGol){
+      // ● Gol
+      ctx.fillStyle = BLACK;
+      drawCircle(ctx, x, y, r);
+    } else if(p.finalizacaoTipo === 'cabeca'){
+      // □ Remate de cabeça
+      const s = r * 1.5;
+      ctx.beginPath();
+      ctx.rect(x - s/2, y - s/2, s, s);
+      ctx.fill();
+      ctx.stroke();
+    } else {
+      // ○ Remate
+      drawCircle(ctx, x, y, r);
+    }
+
+    ctx.restore();
+  }
+
+  function drawCircle(ctx, x,y,r){
     ctx.beginPath();
     ctx.arc(x,y,r,0,Math.PI*2);
     ctx.fill();ctx.stroke();
   }
-  function drawStar(x,y,r){
-    ctx.beginPath();
-    ctx.moveTo(x,y-r);
-    ctx.lineTo(x+r*.3,y-r*.3);
-    ctx.lineTo(x+r,y);
-    ctx.lineTo(x+r*.3,y+r*.3);
-    ctx.lineTo(x,y+r);
-    ctx.lineTo(x-r*.3,y+r*.3);
-    ctx.lineTo(x-r,y);
-    ctx.lineTo(x-r*.3,y-r*.3);
-    ctx.closePath();
-    ctx.fill();ctx.stroke();
-  }
-  function drawTriangle(x, y, size, color){
-    const h = size * 1.25; // mais altura útil
 
-    ctx.beginPath();
-    ctx.moveTo(x, y - h/2);       // topo
-    ctx.lineTo(x + size, y + h/2); // base direita
-    ctx.lineTo(x - size, y + h/2); // base esquerda
-    ctx.closePath();
+  /* ================================
+     ORIGEM -> ALVO: TRAJETÓRIA
+  =============================== */
 
+  /* Seta na ponta da linha, recuada para não cobrir o marcador do alvo */
+  function drawArrowHead(ctx, x1, y1, x2, y2, color){
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    const headLen = 8;
+    const backOffset = 12;
+    const tipX = x2 - Math.cos(angle) * backOffset;
+    const tipY = y2 - Math.sin(angle) * backOffset;
+
+    ctx.save();
     ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(tipX, tipY);
+    ctx.lineTo(tipX - headLen*Math.cos(angle - Math.PI/6), tipY - headLen*Math.sin(angle - Math.PI/6));
+    ctx.lineTo(tipX - headLen*Math.cos(angle + Math.PI/6), tipY - headLen*Math.sin(angle + Math.PI/6));
+    ctx.closePath();
     ctx.fill();
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    ctx.restore();
   }
 
-  function drawAlertTriangle(x, y, r, bgColor, tipo) {
-    // geometria equilibrada
-    const halfH = r * 0.9;
-    const halfW = r * 1.0;
-
-    ctx.beginPath();
-    ctx.moveTo(x,        y - halfH); // vértice superior
-    ctx.lineTo(x + halfW, y + halfH);
-    ctx.lineTo(x - halfW, y + halfH);
-    ctx.closePath();
-
-    ctx.fillStyle = bgColor;
-    ctx.fill();
-
-    ctx.strokeStyle = "#000";
+  /* Marcador (pequeno círculo branco) no ponto de origem */
+  function drawOriginMarker(ctx, x, y, color, dashed){
+    ctx.save();
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = color;
     ctx.lineWidth = 2;
+    if(dashed) ctx.setLineDash([4,3]);
+    ctx.beginPath();
+    ctx.arc(x, y, 6, 0, Math.PI*2);
+    ctx.fill();
     ctx.stroke();
+    ctx.restore();
+  }
 
-    // cor do símbolo
-    const exclColor = (tipo === 'viajada') ? "#fff" : "#000";
-    ctx.fillStyle = exclColor;
+  /* Desenha a seta da cobrança (Origem -> Alvo). No mapa principal isso é a
+     ÚNICA representação da cobrança — sem bolinhas de origem/alvo (estilo Opta). */
+  function drawTrajectory(ctx, p){
+    if(p.origemX == null || p.origemY == null) return;
+    const color = p.cor || '#2E5F8A';
 
-    // tamanho proporcional
-    const fontSize = r * 1.6;
-    ctx.font = `${fontSize}px Arial`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "top";
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(p.origemX, p.origemY);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    ctx.restore();
 
-    // coordenada do topo interno do triângulo
-    const triTopY = y - halfH;
-
-    // deslocamento ideal: 1px + metade da altura do símbolo
-    const textY = triTopY + 0.3 + (fontSize * 0.25);
-
-    ctx.fillText("!", x, textY);
+    drawArrowHead(ctx, p.origemX, p.origemY, p.x, p.y, color);
   }
 
   /* UI */
@@ -1375,38 +1965,31 @@ const FIELD = {
   }
 
 
-  function renderStatFilter(group, label, count, internalValue = label){
+  /* Chip de filtro — mesma lógica de statFilters (AND entre grupos, OR dentro do grupo),
+     agora renderizada como um toggle no painel de Filtros, não mais como checkbox fixo na tela. */
+  function renderFilterChip(group, label, count, internalValue = label){
     ensureGroup(group);
     const value = internalValue;
     const active = statFilters[group].has(String(value));
-    const cls = active ? "stat-checkbox active" : "stat-checkbox";
 
     return `
-  <div class="stat-line">
-    <span class="stat-text">${label}: ${count}</span>
-    <input type="checkbox"
-      class="stat-check"
-      data-group="${group}"
-      data-val="${value}"
-      ${active ? "checked" : ""}
-    >
-  </div>`;
-
-
+  <button type="button" class="filter-chip${active ? ' is-active' : ''}"
+    data-group="${group}" data-val="${value}">
+    ${label} <span class="chip-count">${count}</span>
+  </button>`;
   }
 
-
-  function bindStatCheckboxEvents(){
-    statsPanel.querySelectorAll(".stat-check").forEach(el=>{
-      el.onclick = (ev)=>{
+  function bindFilterChipEvents(){
+    filtersGridBody.querySelectorAll(".filter-chip").forEach(el=>{
+      el.onclick = ()=>{
         const group = el.dataset.group;
         const value = el.dataset.val;
         ensureGroup(group);
 
-        if(el.checked){
-          statFilters[group].add(String(value));
+        if(statFilters[group].has(value)){
+          statFilters[group].delete(value);
         } else {
-          statFilters[group].delete(String(value));
+          statFilters[group].add(value);
         }
 
         render();
@@ -1414,11 +1997,319 @@ const FIELD = {
     });
   }
 
+  /* Conta quantos valores de filtro estão ativos no total, para o badge do botão "Filtros" */
+  function countActiveFilters(){
+    let n = 0;
+    for(const group in statFilters){
+      n += statFilters[group].size;
+    }
+    return n;
+  }
+
+  function updateFiltersBadge(){
+    const n = countActiveFilters();
+    filtersActiveBadge.textContent = n;
+    filtersActiveBadge.style.display = n > 0 ? 'inline-flex' : 'none';
+  }
+
+  /* ================================
+     DASHBOARD ANALÍTICO (Chart.js)
+     Usa exclusivamente dados já coletados pelo sistema. Nenhum dado é
+     inventado: métricas sem base suficiente (n=0) simplesmente não são exibidas.
+  =============================== */
+  let chartRegistry = {};
+
+  /* Chart.js é carregado via CDN externo (script no fim do body). Se a rede estiver
+     indisponível/bloqueada, a lib pode não carregar — isso é uma condição real do
+     ambiente (não um bug de lógica), então tratamos de forma explícita: os gráficos
+     ficam indisponíveis e o restante do dashboard (KPIs, comparações, insights)
+     continua funcionando normalmente. */
+  function chartsAvailable(){
+    return typeof Chart !== 'undefined';
+  }
+
+  function makeChart(canvasId, config){
+    if(!chartsAvailable()) return;
+    if(chartRegistry[canvasId]){
+      chartRegistry[canvasId].destroy();
+      delete chartRegistry[canvasId];
+    }
+    const canvas = document.getElementById(canvasId);
+    if(!canvas) return;
+    chartRegistry[canvasId] = new Chart(canvas.getContext('2d'), config);
+  }
+
+  function destroyAllCharts(){
+    Object.keys(chartRegistry).forEach(id => chartRegistry[id].destroy());
+    chartRegistry = {};
+  }
+
+  function pct(n, d){
+    return d > 0 ? Math.round((n / d) * 100) : null;
+  }
+
+  function capitalize(s){
+    return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+  }
+
+  function kpiCardHtml(label, value, sub){
+    const display = (value === null) ? '—' : `${value}<span class="kpi-unit">%</span>`;
+    return `
+  <div class="kpi-card">
+    <div class="kpi-label">${label}</div>
+    <div class="kpi-value">${display}</div>
+    ${sub ? `<div class="kpi-sub">${sub}</div>` : ''}
+  </div>`;
+  }
+
+  const BAR_OPTS_BASE = {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#E4E6EA' } },
+      y: { grid: { display: false }, ticks: { font: { size: 11.5 } } }
+    }
+  };
+
+  function buildBarChart(canvasId, rows /* [label, value, color] */){
+    makeChart(canvasId, {
+      type: 'bar',
+      data: {
+        labels: rows.map(r=>r[0]),
+        datasets: [{
+          data: rows.map(r=>r[1]),
+          backgroundColor: rows.map(r=>r[2] || '#2B2F33'),
+          borderRadius: 4,
+          maxBarThickness: 24
+        }]
+      },
+      options: BAR_OPTS_BASE
+    });
+  }
+
+  function buildDoughnutChart(canvasId, rows /* [label, value] */){
+    makeChart(canvasId, {
+      type: 'doughnut',
+      data: {
+        labels: rows.map(r=>r[0]),
+        datasets: [{
+          data: rows.map(r=>r[1]),
+          backgroundColor: ['#2B2F33','#9AA0AA','#D9A441','#1F6F4F'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '62%',
+        plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } }
+      }
+    });
+  }
+
+  function buildConvChart(canvasId, rows /* [label, pct, total] */){
+    makeChart(canvasId, {
+      type: 'bar',
+      data: {
+        labels: rows.map(r=>`${r[0]} (n=${r[2]})`),
+        datasets: [{
+          data: rows.map(r=>r[1]),
+          backgroundColor: '#1F6F4F',
+          borderRadius: 4,
+          maxBarThickness: 24
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ctx.parsed.x + '% de conversão em finalização' } }
+        },
+        scales: {
+          x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#E4E6EA' } },
+          y: { grid: { display: false }, ticks: { font: { size: 11.5 } } }
+        }
+      }
+    });
+  }
+
+  /* Gera insights automáticos em texto, cada um condicionado a existir base suficiente (n>0) */
+  function buildInsights({ totalOf, finsOf, golsOf, clarasOf, contatoOfNosso, ladoConv, tipoConv }){
+    const out = [];
+
+    if(totalOf > 0){
+      out.push(`<b>${pct(finsOf, totalOf)}%</b> das cobranças ofensivas geraram finalização (${finsOf} de ${totalOf}).`);
+    }
+    if(totalOf > 0 && golsOf > 0){
+      out.push(`<b>${pct(golsOf, totalOf)}%</b> das cobranças ofensivas terminaram em gol (${golsOf} gol${golsOf===1?'':'s'}).`);
+    }
+    if(ladoConv.length > 0){
+      const melhor = ladoConv.slice().sort((a,b)=>b[1]-a[1])[0];
+      out.push(`O lado <b>${melhor[0]}</b> é o mais eficiente: <b>${melhor[1]}%</b> de conversão em finalização (n=${melhor[2]}).`);
+    }
+    if(tipoConv.length > 0){
+      const melhor = tipoConv.slice().sort((a,b)=>b[1]-a[1])[0];
+      out.push(`A cobrança <b>${melhor[0].toLowerCase()}</b> tem a maior conversão em finalização: <b>${melhor[1]}%</b> (n=${melhor[2]}).`);
+    }
+    if(totalOf > 0 && contatoOfNosso > 0){
+      out.push(`Vencemos o 1º contato em <b>${pct(contatoOfNosso, totalOf)}%</b> das cobranças ofensivas.`);
+    }
+    if(totalOf > 0 && clarasOf > 0){
+      out.push(`<b>${pct(clarasOf, totalOf)}%</b> das cobranças ofensivas geraram uma chance clara.`);
+    }
+
+    // Reaproveita o ranking já calculado para Cobradores/Jogadores (sem duplicar lógica)
+    const { rankCobradores, rankJogadores } = buildPlayersStats();
+    if(rankCobradores.length > 0){
+      const c = rankCobradores[0];
+      out.push(`Melhor cobrador: <b>${c.nome}</b> (${c.cobrancas} cobranças, ${c.gols} assistência${c.gols===1?'':'s'}).`);
+    }
+    if(rankJogadores.length > 0){
+      const j = rankJogadores[0];
+      out.push(`Melhor finalizador: <b>${j.nome}</b> (${j.finalizacoes} finalizações, ${j.gols} gol${j.gols===1?'':'s'}).`);
+    }
+
+    return out;
+  }
+
+  /* Fallback sem Chart.js: mesma informação, em barras HTML simples (sempre funciona,
+     sem depender de rede/CDN). rows: [label, value, color?] */
+  function renderMiniBars(rows){
+    const max = Math.max(...rows.map(r=>r[1]), 1);
+    return `<div class="mini-bars">` + rows.map(([label, value, color])=>{
+      const w = Math.round((value / max) * 100);
+      return `
+      <div class="mini-bar-row">
+        <span class="mini-bar-label">${label}</span>
+        <span class="mini-bar-track"><span class="mini-bar-fill" style="width:${w}%; background:${color || 'var(--primary)'}"></span></span>
+        <span class="mini-bar-value">${value}</span>
+      </div>`;
+    }).join('') + `</div>`;
+  }
+
+  /* Fallback sem Chart.js para os gráficos de conversão. rows: [label, pct, total] */
+  function renderMiniConvBars(rows){
+    return `<div class="mini-bars">` + rows.map(([label, pctVal, total])=>{
+      return `
+      <div class="mini-bar-row">
+        <span class="mini-bar-label">${label} (n=${total})</span>
+        <span class="mini-bar-track"><span class="mini-bar-fill" style="width:${pctVal}%; background:var(--accent)"></span></span>
+        <span class="mini-bar-value">${pctVal}%</span>
+      </div>`;
+    }).join('') + `</div>`;
+  }
+
+  function renderAnalyticsDashboard(data){
+    destroyAllCharts();
+
+    if(!data || data.total === 0){
+      statsPanel.innerHTML = `<div class="chart-card chart-empty">Nenhum dado registrado ainda — marque cobranças no mapa para ver o dashboard analítico.</div>`;
+      return;
+    }
+
+    // ===== métricas derivadas (sempre a partir de "points", igual ao resto do sistema) =====
+    const totalOf        = points.filter(p=>p.situacao==='ofensiva').length;
+    const finsOf         = points.filter(p=>p.situacao==='ofensiva' && p.finalizou).length;
+    const golsOf         = points.filter(p=>p.situacao==='ofensiva' && p.teveGol).length;
+    const clarasOf       = points.filter(p=>p.situacao==='ofensiva' && p.qualidadeChance==='clara').length;
+    const contatoOfNosso = points.filter(p=>p.situacao==='ofensiva' && p.primeiroContato==='nosso').length;
+
+    const ladoConv = ['direito','esquerdo','central'].map(l=>{
+      const tot = points.filter(p=>p.situacao==='ofensiva' && p.lado===l).length;
+      const fin = points.filter(p=>p.situacao==='ofensiva' && p.lado===l && p.finalizou).length;
+      return [capitalize(l), pct(fin,tot), tot];
+    }).filter(r=>r[2] > 0);
+
+    const tipoConv = [['viajada','Viajada'],['rapida','Rápida'],['curta','Curta']].map(([v,label])=>{
+      const tot = points.filter(p=>p.situacao==='ofensiva' && p.tipo===v).length;
+      const fin = points.filter(p=>p.situacao==='ofensiva' && p.tipo===v && p.finalizou).length;
+      return [label, pct(fin,tot), tot];
+    }).filter(r=>r[2] > 0);
+
+    // ===== conjuntos de dados por gráfico (só entram no dashboard se tiverem algum valor > 0) =====
+    const charts = [
+      { id:'chartTipo',      title:'Tipo de cobrança', type:'bar',
+        rows:[['Viajada', data.tipo.viajada||0, '#2E5F8A'], ['Rápida', data.tipo.rapida||0, '#B8473F'], ['Curta', data.tipo.curta||0, '#D9A441']] },
+      { id:'chartLado',      title:'Lado da cobrança', type:'bar',
+        rows:[['Direito', data.lado.direito||0, '#2B2F33'], ['Esquerdo', data.lado.esquerdo||0, '#6B7178'], ['Central', data.lado.central||0, '#9AA0AA']] },
+      { id:'chartAbertura',  title:'Abertura', type:'donut',
+        rows:[['Aberta', data.abertura.aberta||0], ['Fechada', data.abertura.fechada||0]] },
+      { id:'chartContato',   title:'1º Contato', type:'donut',
+        rows:[['Nosso', data.primeiroContato.nosso||0], ['Adversário', data.primeiroContato.adversario||0], ['Goleiro', data.primeiroContato.goleiro||0]] },
+      { id:'chartResultado', title:'Resultado da jogada', type:'bar',
+        rows:[
+          ['Gol', data.gols||0, '#1F6F4F'],
+          ['Bloqueada', data.resultadoJogada.bloqueada||0, '#9AA0AA'],
+          ['Fora', data.resultadoJogada.fora||0, '#B8473F'],
+          ['No gol', data.resultadoJogada.noGol||0, '#2E5F8A'],
+          ['Contra-ataque', data.resultadoJogada.contraAtaque||0, '#B3261E'],
+          ['Corte', data.resultadoJogada.corte||0, '#CBCED4'],
+          ['Nada', data.resultadoJogada.nada||0, '#E4E6EA'],
+        ] },
+    ].filter(c => c.rows.some(r=>r[1] > 0));
+
+    const convCharts = [
+      { id:'chartConvLado', title:'Conversão por lado', rows: ladoConv },
+      { id:'chartConvTipo', title:'Conversão por tipo de cobrança', rows: tipoConv },
+    ].filter(c => c.rows.length > 0);
+
+    const kpis = [
+      kpiCardHtml('Conversão (finalização/ofensiva)', pct(finsOf, totalOf), totalOf ? `${finsOf} de ${totalOf} cobranças ofensivas` : null),
+      kpiCardHtml('Gols / ofensiva', pct(golsOf, totalOf), golsOf ? `${golsOf} gol${golsOf===1?'':'s'} marcado${golsOf===1?'':'s'}` : null),
+      kpiCardHtml('Chance clara / ofensiva', pct(clarasOf, totalOf)),
+      kpiCardHtml('1º contato ganho (ofensiva)', pct(contatoOfNosso, totalOf)),
+    ].join('');
+
+    const available = chartsAvailable();
+    const chartBody      = c => available ? `<canvas id="${c.id}"></canvas>` : renderMiniBars(c.rows);
+    const convChartBody  = c => available ? `<canvas id="${c.id}"></canvas>` : renderMiniConvBars(c.rows);
+
+    statsPanel.innerHTML = `
+    <div class="analytics-header">
+      <div>
+        <div class="analytics-title">Dashboard Analítico</div>
+        <div class="analytics-subtitle">Baseado em ${data.total} cobrança${data.total===1?'':'s'} registrada${data.total===1?'':'s'}${available ? '' : ' — gráficos visuais indisponíveis no momento (sem conexão com o CDN); exibindo os mesmos dados em modo texto.'}</div>
+      </div>
+    </div>
+
+    <div class="kpi-row">${kpis}</div>
+
+    ${(charts.length + convCharts.length) > 0 ? `
+    <div class="charts-grid">
+      ${charts.map(c=>`<div class="chart-card"><div class="chart-card-title">${c.title}</div>${chartBody(c)}</div>`).join('')}
+      ${convCharts.map(c=>`<div class="chart-card"><div class="chart-card-title">${c.title}</div>${convChartBody(c)}</div>`).join('')}
+    </div>` : ''}
+
+    <div class="insights-card">
+      <div class="chart-card-title">Insights automáticos</div>
+      <ul class="insights-list" id="insightsList"></ul>
+    </div>
+  `;
+
+    if(available){
+      charts.forEach(c=>{
+        if(c.type === 'donut') buildDoughnutChart(c.id, c.rows);
+        else buildBarChart(c.id, c.rows);
+      });
+      convCharts.forEach(c=> buildConvChart(c.id, c.rows));
+    }
+
+    const insights = buildInsights({ totalOf, finsOf, golsOf, clarasOf, contatoOfNosso, ladoConv, tipoConv });
+    document.getElementById('insightsList').innerHTML = insights.length
+      ? insights.map(i=>`<li>${i}</li>`).join('')
+      : '<li>Registre mais cobranças para gerar insights automáticos.</li>';
+  }
+
 
   function updateStats(){
     if(points.length===0){
-      statsPanel.textContent="Nenhum dado";
-      drawStatsChart(0,0);
+      filtersGridBody.textContent = "Nenhum dado";
+      renderAnalyticsDashboard(null);
+      updateFiltersBadge();
       return;
     }
 
@@ -1472,104 +2363,130 @@ const FIELD = {
     const falhasGoleiro       = points.filter(p => p.falha === "goleiro").length;
     const falhasBolaEnsaiada  = points.filter(p => p.falha === "bolaEnsaiada").length;
 
-    statsPanel.innerHTML=
+    filtersGridBody.innerHTML=
   `
-  <div class="stats-grid">
-
-    <div class="stats-block">
-      <b>Bola parada</b>
-      ${renderStatFilter("tipoBP","escanteio",tipoBPCount.escanteio||0)}
-      ${renderStatFilter("tipoBP","faltaIndireta",tipoBPCount.faltaIndireta||0)}
+    <div>
+      <div class="filter-group-title">Bola parada</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("tipoBP","Escanteio",tipoBPCount.escanteio||0,"escanteio")}
+        ${renderFilterChip("tipoBP","Falta indireta",tipoBPCount.faltaIndireta||0,"faltaIndireta")}
+      </div>
     </div>
 
-    <div class="stats-block">
-      <b>Situação</b>
-      ${renderStatFilter("situacao","ofensiva",situacao.ofensiva||0)}
-      ${renderStatFilter("situacao","defensiva",situacao.defensiva||0)}
+    <div>
+      <div class="filter-group-title">Situação</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("situacao","Ofensiva",situacao.ofensiva||0,"ofensiva")}
+        ${renderFilterChip("situacao","Defensiva",situacao.defensiva||0,"defensiva")}
+      </div>
     </div>
 
-    <div class="stats-block">
-      <b>Tipo da cobrança</b>
-      ${renderStatFilter("tipo","viajada",tipo.viajada||0)}
-      ${renderStatFilter("tipo","rapida",tipo.rapida||0)}
-      ${renderStatFilter("tipo","curta",tipo.curta||0)}
-      ${renderStatFilter("cobFora", LABEL.cobFora.true, cobrancaFora, "true")}
+    <div>
+      <div class="filter-group-title">Tipo da cobrança</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("tipo","Viajada",tipo.viajada||0,"viajada")}
+        ${renderFilterChip("tipo","Rápida",tipo.rapida||0,"rapida")}
+        ${renderFilterChip("tipo","Curta",tipo.curta||0,"curta")}
+        ${renderFilterChip("cobFora", LABEL.cobFora.true, cobrancaFora, "true")}
+      </div>
     </div>
 
-    <div class="stats-block">
-      <b>Abertura</b>
-      ${renderStatFilter("abertura","aberta",abertura.aberta||0)}
-      ${renderStatFilter("abertura","fechada",abertura.fechada||0)}
+    <div>
+      <div class="filter-group-title">Abertura</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("abertura","Aberta",abertura.aberta||0,"aberta")}
+        ${renderFilterChip("abertura","Fechada",abertura.fechada||0,"fechada")}
+      </div>
     </div>
 
-    <div class="stats-block">
-      <b>Lado</b>
-      ${renderStatFilter("lado","direito",lado.direito||0)}
-      ${renderStatFilter("lado","esquerdo",lado.esquerdo||0)}
-      ${renderStatFilter("lado","central",lado.central||0)}
+    <div>
+      <div class="filter-group-title">Lado</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("lado","Direito",lado.direito||0,"direito")}
+        ${renderFilterChip("lado","Esquerdo",lado.esquerdo||0,"esquerdo")}
+        ${renderFilterChip("lado","Central",lado.central||0,"central")}
+      </div>
     </div>
 
-    <div class="stats-block">
-      <b>1º Contato</b>
-      ${renderStatFilter("primeiroContato","nosso",primeiroContato.nosso||0)}
-      ${renderStatFilter("primeiroContato","adversario",primeiroContato.adversario||0)}
-      ${renderStatFilter("primeiroContato","goleiro",primeiroContato.goleiro||0)}
+    <div>
+      <div class="filter-group-title">1º Contato</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("primeiroContato","Nosso",primeiroContato.nosso||0,"nosso")}
+        ${renderFilterChip("primeiroContato","Adversário",primeiroContato.adversario||0,"adversario")}
+        ${renderFilterChip("primeiroContato","Goleiro",primeiroContato.goleiro||0,"goleiro")}
+      </div>
     </div>
 
-    <div class="stats-block">
-      <b>Finalizações</b>
-      ${renderStatFilter("finalizou", LABEL.finalizou.true, finalizouSim, "true")}
-      ${renderStatFilter("finalizou", LABEL.finalizou.false, finalizouNao, "false")}
-      ${renderStatFilter("finalForaArea", LABEL.finalForaArea.true, finalForaArea, "true")}
-      ${renderStatFilter("resultadoJogada","noGol",resultadoJogada.noGol||0)}
-      ${renderStatFilter("resultadoJogada","fora",resultadoJogada.fora||0)}
+    <div>
+      <div class="filter-group-title">Finalização</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("finalizou", LABEL.finalizou.true, finalizouSim, "true")}
+        ${renderFilterChip("finalizou", LABEL.finalizou.false, finalizouNao, "false")}
+        ${renderFilterChip("finalForaArea", LABEL.finalForaArea.true, finalForaArea, "true")}
+        ${renderFilterChip("resultadoJogada","No gol",resultadoJogada.noGol||0,"noGol")}
+        ${renderFilterChip("resultadoJogada","Para fora",resultadoJogada.fora||0,"fora")}
+      </div>
     </div>
 
-    <div class="stats-block">
-      <b>Qualidade</b>
-      ${renderStatFilter("qualidadeChance","clara",qualidadeChance.clara||0)}
-      ${renderStatFilter("qualidadeChance","boa",qualidadeChance.boa||0)}
-      ${renderStatFilter("qualidadeChance","ruim",qualidadeChance.ruim||0)}
+    <div>
+      <div class="filter-group-title">Qualidade</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("qualidadeChance","Clara",qualidadeChance.clara||0,"clara")}
+        ${renderFilterChip("qualidadeChance","Boa",qualidadeChance.boa||0,"boa")}
+        ${renderFilterChip("qualidadeChance","Ruim",qualidadeChance.ruim||0,"ruim")}
+      </div>
     </div>
 
-    <div class="stats-block">
-      <b>Altura</b>
-      ${renderStatFilter("altura","rasteira",altura.rasteira||0)}
-      ${renderStatFilter("altura","media",altura.media||0)}
-      ${renderStatFilter("altura","alta",altura.alta||0)}
+    <div>
+      <div class="filter-group-title">Altura</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("altura","Rasteira",altura.rasteira||0,"rasteira")}
+        ${renderFilterChip("altura","Média",altura.media||0,"media")}
+        ${renderFilterChip("altura","Alta",altura.alta||0,"alta")}
+      </div>
     </div>
 
-    <div class="stats-block">
-      <b>Resultado</b>
-      ${renderStatFilter("teveGol", LABEL.teveGol.true, gols, "true")}
-      ${renderStatFilter("resultadoJogada","contraAtaque",resultadoJogada.contraAtaque||0)}
-      ${renderStatFilter("resultadoJogada","bloqueada",resultadoJogada.bloqueada||0)}
-      ${renderStatFilter("resultadoJogada","corte",resultadoJogada.corte||0)}
-      ${renderStatFilter("resultadoJogada","nada",resultadoJogada.nada||0)}
+    <div>
+      <div class="filter-group-title">Resultado</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("teveGol", LABEL.teveGol.true, gols, "true")}
+        ${renderFilterChip("resultadoJogada","Contra-ataque",resultadoJogada.contraAtaque||0,"contraAtaque")}
+        ${renderFilterChip("resultadoJogada","Bloqueada",resultadoJogada.bloqueada||0,"bloqueada")}
+        ${renderFilterChip("resultadoJogada","Corte",resultadoJogada.corte||0,"corte")}
+        ${renderFilterChip("resultadoJogada","Nada",resultadoJogada.nada||0,"nada")}
+      </div>
     </div>
 
-    <div class="stats-block">
-      <b>Falha</b>
-      ${renderStatFilter("falha", LABEL.falha.coletiva, falhasColetiva, "coletiva")}
-      ${renderStatFilter("falha", LABEL.falha.individual, falhasIndividual, "individual")}
-      ${renderStatFilter("falha", LABEL.falha.semResponsavel, falhasSemResponsavel, "semResponsavel")}
-      ${renderStatFilter("falha", LABEL.falha.goleiro, falhasGoleiro, "goleiro")}
-      ${renderStatFilter("falha", LABEL.falha.bolaEnsaiada, falhasBolaEnsaiada, "bolaEnsaiada")}
-
-      
+    <div>
+      <div class="filter-group-title">Falha</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("falha", LABEL.falha.coletiva, falhasColetiva, "coletiva")}
+        ${renderFilterChip("falha", LABEL.falha.individual, falhasIndividual, "individual")}
+        ${renderFilterChip("falha", LABEL.falha.semResponsavel, falhasSemResponsavel, "semResponsavel")}
+        ${renderFilterChip("falha", LABEL.falha.goleiro, falhasGoleiro, "goleiro")}
+        ${renderFilterChip("falha", LABEL.falha.bolaEnsaiada, falhasBolaEnsaiada, "bolaEnsaiada")}
+      </div>
     </div>
 
-    <div class="stats-block">
-      <b>2ª bola</b>
-      ${renderStatFilter("segundaBola","nossa",segundaNossa,"nossa")}
-      ${renderStatFilter("segundaBola","adversario",segundaAdv,"adversario")}
+    <div>
+      <div class="filter-group-title">2ª bola</div>
+      <div class="filter-chip-list">
+        ${renderFilterChip("segundaBola","Nossa",segundaNossa,"nossa")}
+        ${renderFilterChip("segundaBola","Adversário",segundaAdv,"adversario")}
+      </div>
     </div>
-
-  </div>
   `;
 
-    bindStatCheckboxEvents();
-    drawStatsChart(finalizouSim,finalizouNao);
+    bindFilterChipEvents();
+    updateFiltersBadge();
+
+    // ===== Dashboard analítico (item 5-8): usa exatamente os mesmos dados já calculados acima =====
+    renderAnalyticsDashboard({
+      total, tipoBPCount, tipo, lado, abertura, situacao, primeiroContato, segundaBola,
+      qualidadeChance, altura, resultadoJogada, falha,
+      finalizouSim, finalizouNao, finalForaArea, finalDentroArea,
+      gols, claras, segundaNossa, segundaAdv, cobrancaFora
+    });
   }
 
   function countBy(arr,key){
@@ -1605,6 +2522,10 @@ const FIELD = {
     filterLado=e.target.value;
     render();
   };
+  filterMapViewSelect.onchange=e=>{
+    filterMapView=e.target.value;
+    render();
+  };
   btnHeatmapToggle.onclick=()=>{
     heatmapOn=!heatmapOn;
     btnHeatmapToggle.textContent=heatmapOn?'Heatmap: ON':'Heatmap: OFF';
@@ -1612,12 +2533,14 @@ const FIELD = {
   };
 
 btnExportCSV.onclick = ()=>{
-  let csv = "x,y,tipoBP,tipo,lado,abertura,primeiroContato,segundaBola,quemCobrou,situacao,cobFora,teveGol,finalizou,finalizacaoTipo,qualidadeChance,altura,finalForaArea,resultadoJogada,goalX,goalY,quemFinalizou,falha\n";
+  let csv = "x,y,origemX,origemY,tipoBP,tipo,lado,abertura,primeiroContato,segundaBola,quemCobrou,situacao,cobFora,teveGol,finalizou,finalizacaoTipo,qualidadeChance,altura,finalForaArea,resultadoJogada,finalizacaoCampoX,finalizacaoCampoY,goalX,goalY,quemFinalizou,falha\n";
 
   points.forEach(p=>{
     csv += [
       p.x,
       p.y,
+      (p.origemX != null) ? p.origemX : '',
+      (p.origemY != null) ? p.origemY : '',
       p.tipoBP || '',
       p.tipo || '',
       p.lado || '',
@@ -1634,6 +2557,8 @@ btnExportCSV.onclick = ()=>{
       p.altura || '',
       p.finalForaArea ? "true" : "false",
       p.resultadoJogada || '',
+      (p.finalizacaoCampoX != null) ? p.finalizacaoCampoX : '',
+      (p.finalizacaoCampoY != null) ? p.finalizacaoCampoY : '',
       p.goalPoint ? p.goalPoint.x : '',
       p.goalPoint ? p.goalPoint.y : '',
       p.quemFinalizou || '',
@@ -1677,9 +2602,28 @@ btnExportCSV.onclick = ()=>{
         const goalX = data.goalX ? Number(data.goalX) : null;
         const goalY = data.goalY ? Number(data.goalY) : null;
 
+        // Compatibilidade: CSVs antigos não têm origemX/origemY.
+        // Nesse caso a origem fica vazia (null) e o ponto existente
+        // é interpretado apenas como ALVO da cobrança.
+        const origemX = (data.origemX !== undefined && data.origemX !== '')
+          ? Number(data.origemX) : null;
+        const origemY = (data.origemY !== undefined && data.origemY !== '')
+          ? Number(data.origemY) : null;
+
+        // Compatibilidade: CSVs antigos não têm finalizacaoCampoX/Y.
+        // Nesse caso o campo fica vazio (null).
+        const finalizacaoCampoX = (data.finalizacaoCampoX !== undefined && data.finalizacaoCampoX !== '')
+          ? Number(data.finalizacaoCampoX) : null;
+        const finalizacaoCampoY = (data.finalizacaoCampoY !== undefined && data.finalizacaoCampoY !== '')
+          ? Number(data.finalizacaoCampoY) : null;
+
         points.push({
           x: Number(data.x),
           y: Number(data.y),
+          origemX: origemX,
+          origemY: origemY,
+          finalizacaoCampoX: finalizacaoCampoX,
+          finalizacaoCampoY: finalizacaoCampoY,
           tipoBP: data.tipoBP || 'escanteio',
           tipo: data.tipo,
           cor: COLORS[data.tipo] || '#000',
@@ -1759,12 +2703,15 @@ btnExportCSV.onclick = ()=>{
   }
 
   // =========================
-  // DESENHA OS PONTOS
+  // DESENHA OS PONTOS — a seta da cobrança é SEMPRE desenhada;
+  // o filtro "Mapa" controla apenas o marcador de finalização.
   // =========================
+  const pngShowFinalizacao = (filterMapView !== 'cobranca');
+
   vis.forEach(p => {
+    // ====== COBRANÇA: sempre visível — origem -> alvo ======
     ox.lineWidth = 2;
 
-    // COBRANÇA PRA FORA (prioritário)
     if (p.cobFora) {
       ox.strokeStyle = "#cc0000";
       ox.lineWidth = 6;
@@ -1774,48 +2721,13 @@ btnExportCSV.onclick = ()=>{
       ox.moveTo(p.x + 10, p.y - 10);
       ox.lineTo(p.x - 10, p.y + 10);
       ox.stroke();
-      return;
+    } else {
+      drawTrajectory(ox, p);
     }
 
-    // GOL
-    if (p.teveGol) {
-      ox.fillStyle = p.cor;
-      ox.strokeStyle = "#000";
-      ox.beginPath();
-      ox.moveTo(p.x, p.y - 12);
-      ox.lineTo(p.x + 12 * 0.3, p.y - 12 * 0.3);
-      ox.lineTo(p.x + 12, p.y);
-      ox.lineTo(p.x + 12 * 0.3, p.y + 12 * 0.3);
-      ox.lineTo(p.x, p.y + 12);
-      ox.lineTo(p.x - 12 * 0.3, p.y + 12 * 0.3);
-      ox.lineTo(p.x - 12, p.y);
-      ox.lineTo(p.x - 12 * 0.3, p.y - 12 * 0.3);
-      ox.closePath();
-      ox.fill(); ox.stroke();
-    }
-
-    // CHANCE CLARA
-    else if (p.qualidadeChance === 'clara') {
-      drawAlertTrianglePNG(ox, p.x, p.y, 12, CLARA_COLORS[p.tipo]);
-    }
-
-    // NORMAL
-    else {
-      ox.fillStyle = p.cor;
-      ox.strokeStyle = p.finalizou ? "#000" : "transparent";
-      ox.beginPath();
-      ox.arc(p.x, p.y, 10, 0, Math.PI * 2);
-      ox.fill(); ox.stroke();
-    }
-
-    // LETRA (D/E/C)
-    if (p.qualidadeChance !== 'clara') {
-      ox.font = '10px Arial';
-      ox.fillStyle = 'white';
-      ox.textAlign = 'center';
-      ox.textBaseline = 'middle';
-      const letra = p.lado ? p.lado[0].toUpperCase() : '';
-      ox.fillText(letra, p.x, p.y);
+    // ====== FINALIZAÇÃO: marcador preto único, estilo Opta ======
+    if (pngShowFinalizacao && p.finalizacaoCampoX != null && p.finalizacaoCampoY != null) {
+      drawFinalizacaoMarkerOpta(ox, p.finalizacaoCampoX, p.finalizacaoCampoY, p);
     }
   });
 
@@ -1828,14 +2740,12 @@ btnExportCSV.onclick = ()=>{
     ox.textAlign = "left";
 
     const items = [
-      { type: "box", color: "#0033AA", text: "Viajada" },
-      { type: "box", color: "#D61B1B", text: "Rápida" },
-      { type: "box", color: "#EFB900", text: "Curta" },
-      { type: "text", text: "⭐ Gol" },
-      { type: "text", text: "● Sem gol" },
-      { type: "text", text: "⚠ Chance clara" },
-      { type: "text", text: "Contorno preto = finalizou" },
-      { type: "text", text: "D/E/C = lado da cobrança" },
+      { type: "box", color: "#2E5F8A", text: "Viajada" },
+      { type: "box", color: "#B8473F", text: "Rápida" },
+      { type: "box", color: "#D9A441", text: "Curta" },
+      { type: "text", text: "○ Remate" },
+      { type: "text", text: "□ Remate de cabeça" },
+      { type: "text", text: "● Gol" },
     ];
 
     const maxWidth = o.width * 0.9;
@@ -1904,32 +2814,6 @@ btnExportCSV.onclick = ()=>{
   });
 };
 
-  function drawAlertTrianglePNG(ox, x, y, r, bgColor) {
-    const h = r * 1.5;
-
-    ox.beginPath();
-    ox.moveTo(x, y - h * 0.52);
-    ox.lineTo(x + r, y + h * 0.48);
-    ox.lineTo(x - r, y + h * 0.48);
-    ox.closePath();
-
-    ox.fillStyle = bgColor;
-    ox.fill();
-    ox.strokeStyle = "#000";
-    ox.lineWidth = 2;
-    ox.stroke();
-
-    let exclColor = "#000";
-    if (bgColor === CLARA_COLORS.viajada) exclColor = "#fff";
-
-    ox.fillStyle = exclColor;
-    ox.font = `${r * 1.45}px Arial`;
-    ox.textAlign = "center";
-    ox.textBaseline = "middle";
-    ox.fillText("!", x, y - (h * 0.10));
-  }
-
-
   window.openModalEdit=openModalEdit;
   </script>
 
@@ -1944,10 +2828,13 @@ btnExportCSV.onclick = ()=>{
 
       <b><br>⚠️ IMPORTANTE: O SISTEMA NÃO ARMAZENA OS EVENTOS APÓS RECARREGAR A PÁGINA OU SAIR DO NAVEGADOR. SE PRECISAR PAUSAR OU ENCERRAR O TRABALHO, UTILIZE "EXPORTAR CSV" PARA SALVAR O PROGRESSO E PODER RETOMAR POSTERIORMENTE IMPORTANDO O ARQUIVO NOVAMENTE.</b>
 
-      <br><br><b>Como registrar um evento</b>
+      <br><br><b>Como registrar um evento (Origem → Alvo → Finalização)</b>
       <ul style="margin:6px 0;">
-        <li>Clique no mapa principal para criar um ponto.</li>
-        <li>Preencha informações de cobrança, lado, primeiro contato, resultado, etc.</li>
+        <li><b>Passo 1:</b> Clique no mapa no local exato de onde a bola parada foi cobrada (ORIGEM).</li>
+        <li><b>Passo 2:</b> Clique no primeiro destino da bola após a cobrança (ALVO) — ex: primeiro poste, segundo poste, marca do pênalti. Uma linha é desenhada automaticamente ligando os dois pontos.</li>
+        <li>O modal abre automaticamente após o alvo ser definido. Preencha informações de cobrança, lado, primeiro contato, resultado, etc.</li>
+        <li>Caso exista finalização, o local exato dela continua sendo marcado separadamente no mapa do gol (aba Resultado) — o alvo da cobrança <b>não</b> precisa ser o mesmo lugar da finalização, pois entre os dois pode haver desvio, disputa, 2ª bola, etc.</li>
+        <li>Pressione <b>Esc</b> a qualquer momento antes do modal abrir para cancelar a marcação da origem.</li>
         <li>Salvar registra o evento na base interna.</li>
       </ul>
 
@@ -1961,13 +2848,14 @@ btnExportCSV.onclick = ()=>{
         <li><b>Mostrar</b>: ofensivo / defensivo / ambos.</li>
         <li><b>BP</b>: escanteio / falta indireta.</li>
         <li><b>Lado</b>: direito / esquerdo / central.</li>
+        <li><b>Mapa</b>: controla se o marcador de finalização aparece no mapa principal. A seta da cobrança é sempre exibida.</li>
         <li><b>Heatmap</b>: ON/OFF para visualizar densidade de ações.</li>
+        <li><b>Filtros</b>: abre o painel com filtros avançados (chips) por bola parada, situação, tipo, abertura, lado, 1º contato, finalização, qualidade, altura, resultado, falha e 2ª bola.</li>
       </ul>
 
-      <b>Estatísticas</b>
+      <b>Dashboard estatístico</b>
       <ul style="margin:6px 0;">
-        <li>Contagem automática por tipo de cobrança, lado, resultados.</li>
-        <li>Checkboxs criam filtros internos avançados.</li>
+        <li>KPIs, gráficos de distribuição/comparação e insights automáticos, calculados a partir dos filtros aplicados.</li>
         <li>Jogadores e cobradores possuem ranking automático.</li>
       </ul>
 
@@ -1988,7 +2876,19 @@ btnExportCSV.onclick = ()=>{
     </div>
 
     <div class="actions">
-      <button id="btnHelpClose" class="btn-small" style="background-color: red; color: white;">Entendi</button>
+      <button id="btnHelpClose" class="btn-small" style="background:var(--primary); color:white; border-color:var(--primary);">Entendi</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAINEL DE FILTROS (chips) -->
+<div id="overlayFilters" class="overlay">
+  <div class="modal filters-modal">
+    <div class="header">Filtros avançados</div>
+    <div id="filtersGridBody" class="filters-grid">Nenhum dado</div>
+    <div class="actions">
+      <button id="btnFiltersClearInline" class="btn-small">Limpar filtros</button>
+      <button id="btnFiltersClose" class="btn-small" style="background:var(--primary); color:white; border-color:var(--primary);">Aplicar / Fechar</button>
     </div>
   </div>
 </div>
@@ -2002,18 +2902,6 @@ btnExportCSV.onclick = ()=>{
   filterJogadores.clear();    // 👈 NOVO
   render();
 };
-  function togglePointsList(){
-    const panel = document.getElementById('pointsPanel');
-    const icon = document.getElementById('pointsToggle');
-
-    if(panel.style.display === 'none'){
-      panel.style.display = 'block';
-      icon.textContent = '▼';
-    } else {
-      panel.style.display = 'none';
-      icon.textContent = '▲';
-    }
-  }
 
   const goalViewCanvas = document.getElementById('goalViewCanvas');
   const gvctx = goalViewCanvas.getContext('2d');
@@ -2042,7 +2930,7 @@ btnExportCSV.onclick = ()=>{
     );
     gvctx.clip();
 
-    const vis = getVisiblePoints().filter(p=>p.goalPoint);
+    const vis = (filterMapView === 'cobranca') ? [] : getVisiblePoints().filter(p=>p.goalPoint);
 
  if(heatmapOn){
   drawGoalHeatmap(vis);  // 1) fundo
@@ -2118,6 +3006,72 @@ if(heatmapOn){
     gvctx.restore(); // 🔓 libera canvas
   }
 
+  /* ================================
+     PAINEL "MAPA DAS FINALIZAÇÕES"
+     Mini campo mostrando: Alvo da cobrança (origem desta etapa)
+     -> Local da finalização no campo, para as jogadas visíveis.
+  =============================== */
+  const finalizacoesMapCanvas = document.getElementById('finalizacoesMapCanvas');
+  const fmctx = finalizacoesMapCanvas.getContext('2d');
+
+  function renderFinalizacoesMap(){
+    fmctx.clearRect(0,0,finalizacoesMapCanvas.width,finalizacoesMapCanvas.height);
+    if(imgLoaded){
+      fmctx.drawImage(img,0,0,finalizacoesMapCanvas.width,finalizacoesMapCanvas.height);
+    }
+
+    const scale = getFieldMiniScale(finalizacoesMapCanvas);
+    const vis = getVisiblePoints().filter(p=>p.finalizacaoCampoX != null && p.finalizacaoCampoY != null);
+
+    vis.forEach(p=>{
+      const color = p.cor || '#E10600';
+      const ax = p.x * scale.sx,                    ay = p.y * scale.sy;                    // origem (alvo da cobrança)
+      const fx = p.finalizacaoCampoX * scale.sx,     fy = p.finalizacaoCampoY * scale.sy;    // local da finalização
+
+      fmctx.save();
+      fmctx.strokeStyle = color;
+      fmctx.lineWidth = 1.5;
+      fmctx.setLineDash([4,3]);
+      fmctx.beginPath();
+      fmctx.moveTo(ax, ay);
+      fmctx.lineTo(fx, fy);
+      fmctx.stroke();
+      fmctx.restore();
+
+      // origem — pequeno ponto
+      fmctx.fillStyle = '#fff';
+      fmctx.strokeStyle = color;
+      fmctx.lineWidth = 1.5;
+      fmctx.beginPath();
+      fmctx.arc(ax, ay, 3, 0, Math.PI*2);
+      fmctx.fill(); fmctx.stroke();
+
+      // alvo (local da finalização) — ponto maior, com estrela se foi gol
+      if(p.teveGol){
+        fmctx.fillStyle = color;
+        fmctx.font = '12px Arial';
+        fmctx.textAlign = 'center';
+        fmctx.textBaseline = 'middle';
+        fmctx.fillText('⭐', fx, fy);
+      } else {
+        fmctx.fillStyle = color;
+        fmctx.strokeStyle = '#fff';
+        fmctx.lineWidth = 1;
+        fmctx.beginPath();
+        fmctx.arc(fx, fy, 4, 0, Math.PI*2);
+        fmctx.fill(); fmctx.stroke();
+      }
+    });
+
+    if(vis.length === 0){
+      fmctx.fillStyle = 'rgba(0,0,0,0.55)';
+      fmctx.font = '12px Inter, Arial';
+      fmctx.textAlign = 'center';
+      fmctx.textBaseline = 'middle';
+      fmctx.fillText('Nenhuma finalização registrada', finalizacoesMapCanvas.width/2, finalizacoesMapCanvas.height/2);
+    }
+  }
+
   finalizou.onchange = ()=>{
     if(finalizou.checked){
       enableTab('tab-final');
@@ -2180,10 +3134,14 @@ if(heatmapOn){
     if(finalizou.checked){
       enableTab('tab-final');
       rowQuemFinalizou.style.display = 'flex';
+      finalizacaoCampoWrapper.style.display = 'block';
+      renderFinalizacaoCampoEdit();
     } else {
       rowQuemFinalizou.style.display = 'none';
       quemFinalizou.value = '';
       teveGol.checked = false;
+      finalizacaoCampoWrapper.style.display = 'none';
+      tempFinalizacaoCampo = null;
     }
     updateResultadoOptions();
   };
@@ -2242,6 +3200,77 @@ if(heatmapOn){
       y: e.offsetY
     };
     renderGoalEdit();
+  };
+
+  /* ================================
+     MINI CAMPO — LOCAL DA FINALIZAÇÃO
+     (2ª etapa: Alvo da cobrança -> Finalização no campo)
+  =============================== */
+  const finalizacaoCampoCanvas = document.getElementById('finalizacaoCampoCanvas');
+  const fcctx = finalizacaoCampoCanvas.getContext('2d');
+  const finalizacaoCampoWrapper = document.getElementById('finalizacaoCampoWrapper');
+
+  let tempFinalizacaoCampo = null; // coordenadas no espaço do CAMPO PRINCIPAL (mesma escala de x/y, origemX/Y)
+
+  /* Escala entre o mini-canvas e o canvas principal do campo */
+  function getFieldMiniScale(miniCanvas){
+    return {
+      sx: miniCanvas.width  / (canvas.width  || 1),
+      sy: miniCanvas.height / (canvas.height || 1)
+    };
+  }
+
+  function renderFinalizacaoCampoEdit(){
+    fcctx.clearRect(0,0,finalizacaoCampoCanvas.width,finalizacaoCampoCanvas.height);
+    if(imgLoaded){
+      fcctx.drawImage(img,0,0,finalizacaoCampoCanvas.width,finalizacaoCampoCanvas.height);
+    }
+
+    const scale = getFieldMiniScale(finalizacaoCampoCanvas);
+
+    // referência: Alvo da cobrança (origem desta 2ª trajetória)
+    const alvoRef = pendingClick ? pendingClick : (editingIndex!==null ? points[editingIndex] : null);
+    if(alvoRef){
+      const ax = alvoRef.x * scale.sx;
+      const ay = alvoRef.y * scale.sy;
+      drawOriginMarker(fcctx, ax, ay, '#2B2F33', true);
+
+      if(tempFinalizacaoCampo){
+        const fx = tempFinalizacaoCampo.x * scale.sx;
+        const fy = tempFinalizacaoCampo.y * scale.sy;
+        fcctx.save();
+        fcctx.strokeStyle = '#E10600';
+        fcctx.lineWidth = 2;
+        fcctx.setLineDash([6,4]);
+        fcctx.beginPath();
+        fcctx.moveTo(ax, ay);
+        fcctx.lineTo(fx, fy);
+        fcctx.stroke();
+        fcctx.restore();
+        drawArrowHead(fcctx, ax, ay, fx, fy, '#E10600');
+      }
+    }
+
+    if(tempFinalizacaoCampo){
+      const fx = tempFinalizacaoCampo.x * scale.sx;
+      const fy = tempFinalizacaoCampo.y * scale.sy;
+      fcctx.fillStyle = '#E10600';
+      fcctx.strokeStyle = '#fff';
+      fcctx.lineWidth = 2;
+      fcctx.beginPath();
+      fcctx.arc(fx, fy, 6, 0, Math.PI*2);
+      fcctx.fill();
+      fcctx.stroke();
+    }
+  }
+
+  finalizacaoCampoCanvas.onclick = e=>{
+    const scale = getFieldMiniScale(finalizacaoCampoCanvas);
+    tempFinalizacaoCampo = {
+      x: e.offsetX / scale.sx,
+      y: e.offsetY / scale.sy
+    };
+    renderFinalizacaoCampoEdit();
   };
 
   function clipGoalMouth(ctx){
@@ -2362,6 +3391,11 @@ function drawGoalLegend(vis){
     points = [];
     
     pendingClick = null;
+    pendingOrigin = null;
+    tempOrigin = null;
+    tempFinalizacaoCampo = null;
+    clickStage = 'idle';
+    updateClickStageUI();
     editingIndex = null;
     tempGoalPoint = null;
     savedGoal = null;
@@ -2372,10 +3406,12 @@ function drawGoalLegend(vis){
     filterShow = 'both';
     filterBP = 'all';
     filterLado = 'all';
+    filterMapView = 'all';
 
     document.getElementById('filterShow').value = 'both';
     document.getElementById('filterBP').value = 'all';
     document.getElementById('filterLado').value = 'all';
+    document.getElementById('filterMapView').value = 'all';
     importCSV.value = '';
 
     // limpa canvas do gol
@@ -2922,6 +3958,33 @@ overlayHelp.onclick = (e)=>{
   }
 };
 
+// ===== PAINEL DE FILTROS (chips) =====
+// Consultados aqui (2o bloco de script) porque o HTML do modal #overlayFilters
+// só existe no DOM a partir deste ponto do documento. Consultar isso no 1o bloco
+// (antes do HTML existir) era a causa raiz do modal de cadastro parar de abrir.
+const overlayFilters = document.getElementById('overlayFilters');
+const filtersGridBody = document.getElementById('filtersGridBody');
+const btnFiltersClose = document.getElementById('btnFiltersClose');
+const btnFiltersClearInline = document.getElementById('btnFiltersClearInline');
+
+btnOpenFilters.onclick = () => {
+  overlayFilters.style.display = "flex";
+};
+btnFiltersClose.onclick = () => {
+  overlayFilters.style.display = "none";
+};
+overlayFilters.onclick = (e)=>{
+  if(e.target === overlayFilters){
+    overlayFilters.style.display = "none";
+  }
+};
+btnFiltersClearInline.onclick = () => {
+  statFilters = {};
+  filterCobradores.clear();
+  filterJogadores.clear();
+  render();
+};
+
 // ===== FIRST-TIME HELP MODAL USING LOCALSTORAGE =====
 (function(){
   const LS_KEY = "bp_help_seen_v1";
@@ -2941,6 +4004,7 @@ overlayHelp.onclick = (e)=>{
   </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/4.4.4/chart.umd.min.js"></script>
 
 <footer id="appFooter">
   © 2026<span id="footerYear"></span> — Desenvolvido por @felipeerabelo_   . 
